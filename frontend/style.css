@@ -1,0 +1,188 @@
+/* ===========================
+   GLOBAL STYLES
+=========================== */
+body {
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===========================
+   NAVIGATION
+=========================== */
+.navy-bg,
+.bg-navy {
+  background-color: #001f3f !important; /* Deep Navy Blue */
+}
+
+.text-navy {
+  color: #001f3f !important;
+}
+
+.text-golden {
+  color: #FFD700 !important; /* Golden Yellow */
+}
+
+.border-navy {
+  border-color: #001f3f !important;
+}
+
+/* ===========================
+   BUTTONS
+=========================== */
+.btn-primary {
+  background-color: #001f3f;
+  border: none;
+  color: #FFD700;
+}
+
+.btn-primary:hover {
+  background-color: #003366;
+}
+
+.btn-warning {
+  background-color: #ffcc00;
+  border: none;
+  color: #001f3f;
+}
+
+.btn-warning:hover {
+  background-color: #e6b800;
+  color: #001f3f;
+}
+
+.btn-navy {
+  background-color: #001f3f;
+  border-color: #001f3f;
+  color: #FFD700;
+}
+
+.btn-navy:hover {
+  background-color: #003366;
+  border-color: #003366;
+  color: #FFD700;
+}
+
+.btn-light {
+  background-color: white;
+  color: #0d3b66;
+}
+
+/* ===========================
+   HERO SECTION
+=========================== */
+.hero {
+  background: url('images/bg.jpg') no-repeat center center/cover;
+  padding: 80px 0;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: white;
+}
+
+.hero-overlay {
+  background-color: rgba(0, 31, 63, 0.7); /* Navy overlay */
+  padding: 40px;
+  border-radius: 15px;
+  color: #fff;
+  text-align: center;
+}
+
+/* ===========================
+   SERVICES SECTION
+=========================== */
+.services-box {
+  background: #fff;
+  border: 2px solid #0d6efd; /* Blue border */
+}
+
+.service-box {
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.service-box:hover {
+  transform: translateY(-5px);
+}
+
+.service-box i {
+  font-size: 40px;
+  margin-bottom: 15px;
+}
+
+/* ===========================
+   FORMS
+=========================== */
+.form-section {
+  background: #f8f9fa;
+}
+
+.form-label {
+  color: #001f3f;
+  font-weight: 500;
+}
+
+#togglePassword {
+  border: none;
+  background: #e9ecef;
+  color: #001f3f;
+  font-weight: 500;
+}
+
+/* ===========================
+   CARDS
+=========================== */
+.card {
+  border-radius: 15px;
+}
+
+.card-header {
+  background-color: #0d3b66 !important;
+  color: #ffcc00 !important;
+}
+
+/* ===========================
+   ADMIN TABLE STYLES
+=========================== */
+.table thead {
+  background-color: #001f3f;
+  color: #FFD700;
+}
+
+.table td,
+.table th {
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.form-control-sm,
+.form-select-sm {
+  min-width: 120px;
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.alert-info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+/* ===========================
+   UTILITIES
+=========================== */
+.text-center {
+  text-align: center;
+}
+
+.text-white {
+  color: #fff !important;
+}

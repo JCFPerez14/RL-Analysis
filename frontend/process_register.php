@@ -1,14 +1,14 @@
 <?php
+session_start();
 include 'connections.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Collect POST data (sanitize/validate as needed)
     $firstname = $_POST['firstname'];
     $middlename = $_POST['middlename'];
     $lastname = $_POST['lastname'];
     $email = $_POST['email'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $mobile = $_POST['mobile'];
-    $password = $_POST['password'];
     $nationality = $_POST['nationality'];
     $sex = $_POST['sex'];
     $academic_year = $_POST['academic_year'];
@@ -25,64 +25,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $province = $_POST['province'];
     $current_address = $_POST['current_address'];
 
-    // Check if email already exists
-    $stmt = $conn->prepare("SELECT id FROM users WHERE email = ? LIMIT 1");
-    if ($stmt === false) {
-        die("Prepare failed: " . htmlspecialchars($conn->error));
+    // ✅ Handle file upload
+    $photoPath = "uploads/default.png"; // default
+    if (!empty($_FILES['photo']['name'])) {
+        $targetDir = "uploads/";
+        if (!is_dir($targetDir)) mkdir($targetDir, 0777, true);
+        
+        $fileName = time() . "_" . basename($_FILES['photo']['name']);
+        $targetFile = $targetDir . $fileName;
+
+        if (move_uploaded_file($_FILES['photo']['tmp_name'], $targetFile)) {
+            $photoPath = $targetFile;
+        }
     }
-    $stmt->bind_param("s", $email);
+
+    // ✅ Insert into users
+    $stmt = $conn->prepare("INSERT INTO users (email, password, status) VALUES (?, ?, 'Not Enrolled')");
+    $stmt->bind_param("ss", $email, $password);
     $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        echo "<script>alert('Email already registered! Please use another email.'); window.location.href='register.php';</script>";
-        exit();
-    }
+    $user_id = $stmt->insert_id;
     $stmt->close();
 
-    // Hash the password securely
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    // ✅ Insert into user_info (with photo)
+    $stmt2 = $conn->prepare("INSERT INTO user_info 
+        (user_id, firstname, middlename, lastname, mobile, nationality, sex, academic_year, academic_term, applying_for, strand, program, second_program, family_income, father_occupation, mother_occupation, birthplace, city, province, current_address, photo) 
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
-    // Insert into users (auth table)
-    $stmt = $conn->prepare("INSERT INTO users (email, password, role, status) VALUES (?, ?, 'student', 'Not Enrolled')");
-    if ($stmt === false) {
-        die("Prepare failed: " . htmlspecialchars($conn->error));
-    }
-    $stmt->bind_param("ss", $email, $hashedPassword);
+    $stmt2->bind_param("issssssssssssssssssss", 
+        $user_id, $firstname, $middlename, $lastname, $mobile, $nationality, $sex,
+        $academic_year, $academic_term, $applying_for, $strand, $program, $second_program,
+        $family_income, $father_occupation, $mother_occupation, $birthplace, $city, $province,
+        $current_address, $photoPath
+    );
 
-    if ($stmt->execute()) {
-        $user_id = $conn->insert_id; // get last inserted user id
-
-        // Insert into user_info table
-        $stmt2 = $conn->prepare("INSERT INTO user_info 
-            (user_id, firstname, middlename, lastname, mobile, nationality, sex, academic_year, academic_term, applying_for, strand, program, second_program, family_income, father_occupation, mother_occupation, birthplace, city, province, current_address) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-
-        if ($stmt2 === false) {
-            die("Prepare failed: " . htmlspecialchars($conn->error));
-        }
-
-        $types = "i" . str_repeat("s", 19);
-        $stmt2->bind_param($types, 
-            $user_id, $firstname, $middlename, $lastname, $mobile, $nationality, $sex, $academic_year, $academic_term, 
-            $applying_for, $strand, $program, $second_program, $family_income, $father_occupation, $mother_occupation, 
-            $birthplace, $city, $province, $current_address);
-
-        if ($stmt2->execute()) {
-            header("Location: login.php");
-            exit();
-        } else {
-            echo "Error inserting user info: " . $stmt2->error;
-            // Optionally delete the user to keep DB clean
-            $conn->query("DELETE FROM users WHERE id = $user_id");
-        }
-
-        $stmt2->close();
+    if ($stmt2->execute()) {
+        header("Location: login.php?success=1");
     } else {
-        echo "Error inserting user: " . $stmt->error;
+        echo "Error: " . $stmt2->error;
     }
 
-    $stmt->close();
+    $stmt2->close();
     $conn->close();
 }
 ?>

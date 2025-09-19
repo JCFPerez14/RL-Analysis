@@ -11,13 +11,24 @@ $total_students = $enrolled + $not_enrolled;
 $enrolled_percent = $total_students > 0 ? round(($enrolled / $total_students) * 100, 2) : 0;
 $not_enrolled_percent = $total_students > 0 ? round(($not_enrolled / $total_students) * 100, 2) : 0;
 
-// Fetch all students with their likelihood from user_info
-$students = $conn->query("
+// Fetch enrolled students
+$students_enrolled = $conn->query("
     SELECT users.id, users.email, users.status, 
            user_info.firstname, user_info.middlename, user_info.lastname,
-           user_info.program, user_info.mobile, user_info.nationality, user_info.likelihood
+           user_info.program, user_info.mobile, user_info.nationality
     FROM users
     LEFT JOIN user_info ON users.id = user_info.user_id
+    WHERE users.status = 'Enrolled'
+");
+
+// Fetch not enrolled students
+$students_not = $conn->query("
+    SELECT users.id, users.email, users.status, 
+           user_info.firstname, user_info.middlename, user_info.lastname,
+           user_info.program, user_info.mobile, user_info.nationality
+    FROM users
+    LEFT JOIN user_info ON users.id = user_info.user_id
+    WHERE users.status = 'Not Enrolled'
 ");
 ?>
 <!DOCTYPE html>
@@ -48,6 +59,7 @@ $students = $conn->query("
       box-shadow: 0 3px 6px rgba(0,0,0,0.1);
       display: flex;
       flex-direction: column;
+      /* gap: 20px; */
     }
     .card-box {
       background: #001f54;
@@ -148,23 +160,6 @@ $students = $conn->query("
       padding-bottom: 10px;
       margin-bottom: 15px;
     }
-    .status-filter {
-      margin-bottom: 15px;
-    }
-    .status-badge {
-      padding: 5px 5px;
-      border-radius: 15px;
-      font-weight: bold;
-    }
-    .status-enrolled {
-      background-color: #d4edda;
-      color: #155724;
-    }
-    .status-not-enrolled {
-      font-size: 0.7em;
-      background-color: #f8d7da;
-      color: #721c24;
-    }
   </style>
 </head>
 <body>
@@ -175,7 +170,7 @@ $students = $conn->query("
   <div class="left-panel">
     <div class="card-box">
       <div>Total Students</div>
-      <div style="font-size: 32px;"><?php echo $total_students; ?></div>
+      <div style="font-size: 32px;">3</div>
     </div>
     <div class="chart-container">
       <canvas id="enrollmentChart"></canvas>
@@ -187,74 +182,85 @@ $students = $conn->query("
     <div class="progress-box">
       <h6 class="fw-bold">Most Likely to Enroll / Not Enroll</h6>
       <div class="progress mb-2">
-        <div class="progress-bar bg-success" role="progressbar" style="width: <?php echo $enrolled_percent; ?>%">
-          Enrolled <?php echo $enrolled_percent; ?>%
+        <div class="progress-bar bg-success" role="progressbar" style="width: 62.67%">
+          Enrolled 62.67%
         </div>
       </div>
       <div class="progress">
-        <div class="progress-bar bg-danger" role="progressbar" style="width: <?php echo $not_enrolled_percent; ?>%">
-          Not Enrolled <?php echo $not_enrolled_percent; ?>%
+        <div class="progress-bar bg-danger" role="progressbar" style="width: 33.33%">
+          Not Enrolled 33.33%
         </div>
       </div>
     </div>
 
     <div class="student-table-box">
-      <!-- Filter Controls -->
+      <!-- Sticky Slider Filter -->
       <div class="filter-box">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="slider-label">Show students with likelihood ≥ <span id="minValLabel">70%</span></div>
-            <input type="range" min="0" max="100" value="70" id="minSlider">
-          </div>
-          <div class="col-md-6">
-            <div class="slider-label">Filter by Status</div>
-            <select class="form-select" id="statusFilter">
-              <option value="all">All Students</option>
-              <option value="Enrolled">Enrolled Only</option>
-              <option value="Not Enrolled">Not Enrolled Only</option>
-            </select>
-          </div>
-        </div>
+        <div class="slider-label">Show students with likelihood ≥ <span id="minValLabel">70%</span></div>
+        <input type="range" min="0" max="100" value="70" id="minSlider">
       </div>
 
       <h6 class="fw-bold mt-3">Student Details</h6>
       
       <div class="tab-content">
-        <table class="table table-bordered table-sm student-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Program</th>
-              <th>Mobile</th>
-              <th>Status</th>
-              <th>Likelihood</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            if ($students->num_rows > 0) {
-                while($row = $students->fetch_assoc()) {
-                    $likelihood = isset($row['likelihood']) ? $row['likelihood'] : 0;
-                    echo "<tr data-status='".$row['status']."' data-likelihood='$likelihood'>";
-                    echo "<td>".$row['id']."</td>";
-                    $name = $row['firstname'] . ' ' . $row['middlename'] . ' ' . $row['lastname'];
-                    echo "<td>".htmlspecialchars($name)."</td>";
-                    echo "<td>".htmlspecialchars($row['email'])."</td>";
-                    echo "<td>".htmlspecialchars($row['program'])."</td>";
-                    echo "<td>".htmlspecialchars($row['mobile'])."</td>";
-                    $status_class = $row['status'] == 'Enrolled' ? 'status-enrolled' : 'status-not-enrolled';
-                    echo "<td><span class='status-badge $status_class'>".$row['status']."</span></td>";
-                    echo "<td>".$likelihood."%</td>";
-                    echo "</tr>";
-                }
-            } else {
-                echo "<tr><td colspan='7'>No students found</td></tr>";
-            }
-            ?>
-          </tbody>
-        </table>
+        <!-- Enrolled -->
+        <div class="tab-pane fade show active" id="enrolled" role="tabpanel">
+          <table class="table table-bordered table-sm student-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Program</th>
+                <th>Mobile</th>
+                <th>Likelihood</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-likelihood="89">
+                <td>3</td>
+                <td>ago afaef aefd</td>
+                <td>gagocrer@gmail.com</td>
+                <td>BSIT</td>
+                <td>0495043954</td>
+                <td>89%</td>
+              </tr>
+              <tr data-likelihood="74">
+                <td>5</td>
+                <td>Seth Andrei Recomono Dimanno</td>
+                <td>dimannosr@students.nu-lipa.edu.ph</td>
+                <td>BSA - Marketing</td>
+                <td>09753327815</td>
+                <td>74%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- Not Enrolled -->
+        <div class="tab-pane fade" id="notenrolled" role="tabpanel">
+          <table class="table table-bordered table-sm student-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Program</th>
+                <th>Mobile</th>
+                <th>Likelihood</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-likelihood="35">
+                <td>7</td>
+                <td>John Michael Smith</td>
+                <td>john.smith@example.com</td>
+                <td>BS Computer Science</td>
+                <td>09123456789</td>
+                <td>35%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -269,7 +275,7 @@ $students = $conn->query("
     data: {
       labels: ['Enrolled', 'Not Enrolled'],
       datasets: [{
-        data: [<?php echo $enrolled; ?>, <?php echo $not_enrolled; ?>],
+        data: [2, 1],
         backgroundColor: ['#001f54', '#ffcc00']
       }]
     },
@@ -283,32 +289,22 @@ $students = $conn->query("
     }
   });
 
-  // Filter elements
+  // Single slider filter
   const minSlider = document.getElementById('minSlider');
   const minValLabel = document.getElementById('minValLabel');
-  const statusFilter = document.getElementById('statusFilter');
 
   function filterStudents() {
     const minVal = parseInt(minSlider.value);
-    const statusVal = statusFilter.value;
     minValLabel.textContent = minVal + '%';
 
     document.querySelectorAll('.student-table tbody tr').forEach(row => {
       const likelihood = parseInt(row.dataset.likelihood);
-      const status = row.dataset.status;
-      
-      // Check both filters
-      const likelihoodMatch = likelihood >= minVal;
-      const statusMatch = statusVal === 'all' || status === statusVal;
-      
-      row.style.display = (likelihoodMatch && statusMatch) ? '' : 'none';
+      row.style.display = (likelihood >= minVal) ? '' : 'none';
     });
   }
 
   minSlider.addEventListener('input', filterStudents);
-  statusFilter.addEventListener('change', filterStudents);
-  
-  // Initialize with default filter
+  // Initialize with 70% filter
   filterStudents();
 </script>
 </body>

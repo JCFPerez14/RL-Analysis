@@ -186,3 +186,40 @@ body {
 .text-white {
   color: #fff !important;
 }
+
+body {
+  background-color: #f8f9fa;
+}
+
+.bg-navy {
+  background-color: #001f3f !important;
+}
+
+.text-golden {
+  color: #FFD700 !important;
+}
+
+.table-dark th {
+  background-color: #001f3f !important;
+  color: #FFD700 !important;
+}
+
+/* Colors */
+.bg-navy { background-color: #001f3f !important; }
+.text-golden { color: #FFD700 !important; }
+
+/* Hero Section */
+.hero {
+  background: url('images/bg.jpg') no-repeat center center/cover;
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hero-overlay {
+  background: rgba(0,0,0,0.6);
+  padding: 40px;
+  border-radius: 12px;
+  text-align: center;
+  color: white;
+}

@@ -152,8 +152,8 @@ $students = $conn->query("
       margin-bottom: 15px;
     }
     .status-badge {
-      padding: 5px 5px;
-      border-radius: 15px;
+      padding: 5px 10px;
+      border-radius: 10px;
       font-weight: bold;
     }
     .status-enrolled {
@@ -161,7 +161,7 @@ $students = $conn->query("
       color: #155724;
     }
     .status-not-enrolled {
-      font-size: 0.7em;
+      font-size: 0.6em;
       background-color: #f8d7da;
       color: #721c24;
     }

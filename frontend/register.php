@@ -10,20 +10,12 @@ include 'connections.php';
   <link rel="stylesheet" href="style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-        /* Navbar */
-    .bg-navy {
-      background-color: #001f3f; /* NU Blue */
-    }
-    .text-golden {
-      color: #FFD700; /* Gold */
-    }
-    .text-navy {
-      color: #001f3f;
-    }
-    .border-navy {
-      border-color: #001f3f;
-    }
-    
+    /* Navbar */
+    .bg-navy { background-color: #001f3f; }
+    .text-golden { color: #FFD700; }
+    .text-navy { color: #001f3f; }
+    .border-navy { border-color: #001f3f; }
+
     /* Hero Section */
     .hero {
       background: url('images/bg.jpg') no-repeat center center fixed;
@@ -38,7 +30,7 @@ include 'connections.php';
       padding-right: 10px;
       padding-left: 10px;
     }
-    
+
     /* Section Titles */
     .section-title {
       color: #001f3f;
@@ -47,6 +39,25 @@ include 'connections.php';
       margin-bottom: 15px;
       font-weight: bold;
     }
+
+    /* Progress Bar */
+    .progress-container {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #fff;
+      padding: 10px 0;
+    }
+    .progress-bar {
+      height: 20px;
+      background-color: #FFD700;
+      color: #001f3f;
+      font-weight: bold;
+      text-align: center;
+      line-height: 20px;
+    }
+    .step-section { display: none; }
+    .step-section.active { display: block; }
   </style>
 </head>
 <body class="bg-light">
@@ -84,155 +95,172 @@ include 'connections.php';
     <div class="row justify-content-center">
       <div class="col-lg-10 col-md-12">
         <div class="card shadow-lg rounded-3 border-0">
+          <div class="progress-container px-4">
+            <div class="progress">
+              <div id="formProgress" class="progress-bar" style="width: 33%;">Step 1 of 3</div>
+            </div>
+          </div>
           <div class="card-body p-4 form-scroll">
             <h2 class="text-center text-navy fw-bold mb-4">Registration Form</h2>
 
             <!-- Registration Form -->
-            <form action="process_register.php" method="POST" enctype="multipart/form-data">
+            <form id="multiStepForm" action="process_register.php" method="POST" enctype="multipart/form-data">
               <div class="row justify-content-center">
                 <div class="col-md-8">
 
-                  <!-- Basic Information -->
-                  <!-- Basic Information -->
-                  <h5 class="section-title">Basic Information</h5>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">First Name</label>
-                    <input type="text" name="firstname" class="form-control border-navy" required>
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">Middle Name</label>
-                    <input type="text" name="middlename" class="form-control border-navy">
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">Last Name</label>
-                    <input type="text" name="lastname" class="form-control border-navy" required>
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">Email Address</label>
-                    <input type="email" name="email" class="form-control border-navy" required>
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">Password</label>
-                    <input type="password" name="password" class="form-control border-navy" required>
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">Mobile Number</label>
-                    <input type="text" name="mobile" class="form-control border-navy" required>
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">Nationality</label>
-                    <input type="text" name="nationality" class="form-control border-navy" required>
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">Sex</label>
-                    <select name="sex" class="form-select border-navy" required>
-                      <option value="">Select</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Prefer not to say">Prefer not to say</option>
-                    </select>
-                  </div>
-
-                  <!-- Academic Information -->
-                  <h5 class="section-title mt-4">Academic Information</h5>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">Academic Year</label>
-                    <input type="text" name="academic_year" class="form-control border-navy" value="2025-2026" required>
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">Academic Term</label>
-                    <select name="academic_term" class="form-select border-navy" required>
-                      <option value="1st Semester">1st Semester</option>
-                      <option value="2nd Semester">2nd Semester</option>
-                      <option value="Summer">Summer</option>
-                    </select>
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">Applying For</label>
-                    <select name="applying_for" class="form-select border-navy" required>
-                      <option value="Freshman">Freshman</option>
-                      <option value="Transferee">Transferee</option>
-                      <option value="Cross Enrollee">Cross Enrollee</option>
-                    </select>
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">Course Strand</label>
-                    <input type="text" name="strand" class="form-control border-navy">
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">Academic Program</label>
-                    <select name="program" class="form-select border-navy" required>
-                      <option value="">-- Select Program --</option>
-                      <option value="BSCS">BSCS</option>
-                      <option value="BSIT">BSIT</option>
-                      <option value="BSCE">BSCE</option>
-                      <option value="BSArch">BSArch</option>
-                      <option value="BSMT">BSMT</option>
-                      <option value="BSN">BSN</option>
-                      <option value="BSPYS">BSPYS</option>
-                      <option value="BSTM">BSTM</option>
-                      <option value="BSA - Marketing">BSA - Marketing</option>
-                      <option value="BSA - Financial Management">BSA - Financial Management</option>
-                    </select>
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">Second Choice of Program</label>
-                    <select name="second_program" class="form-select border-navy" required>
-                      <option value="">-- Select Second Choice Program --</option>
-                      <option value="BSCS">BSCS</option>
-                      <option value="BSIT">BSIT</option>
-                      <option value="BSCE">BSCE</option>
-                      <option value="BSArch">BSArch</option>
-                      <option value="BSMT">BSMT</option>
-                      <option value="BSN">BSN</option>
-                      <option value="BSPYS">BSPYS</option>
-                      <option value="BSTM">BSTM</option>
-                      <option value="BSA - Marketing">BSA - Marketing</option>
-                      <option value="BSA - Financial Management">BSA - Financial Management</option>
-                    </select>
-                  </div>
-
-                  <!-- Additional Information -->
-                  <h5 class="section-title mt-4">Additional Information</h5>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">Family Annual Income</label>
-                    <input type="text" name="family_income" class="form-control border-navy" required>
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">Father's Occupation</label>
-                    <input type="text" name="father_occupation" class="form-control border-navy">
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">Mother's Occupation</label>
-                    <input type="text" name="mother_occupation" class="form-control border-navy">
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">Birthplace</label>
-                    <input type="text" name="birthplace" class="form-control border-navy">
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">City</label>
-                    <input type="text" name="city" class="form-control border-navy">
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">Province</label>
-                    <input type="text" name="province" class="form-control border-navy">
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label text-navy">Currently Residing At</label>
-                    <input type="text" name="current_address" class="form-control border-navy">
-                  </div>
-                  <div class="mb-3 text-center">
-                    <label class="form-label text-navy">Profile Picture</label>
-                    <div class="mb-2">
-                      <img id="preview" src="uploads/default.png" alt="Preview" class="img-thumbnail" style="max-width:150px; max-height:150px;">
+                  <!-- STEP 1: Basic Information -->
+                  <div class="step-section active" id="step-1">
+                    <h5 class="section-title">Basic Information</h5>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">First Name</label>
+                      <input type="text" name="firstname" class="form-control border-navy" required>
                     </div>
-                    <input type="file" name="photo" class="form-control border-navy" accept="image/*" onchange="previewImage(event)">
+                    <div class="mb-3">
+                      <label class="form-label text-navy">Middle Name</label>
+                      <input type="text" name="middlename" class="form-control border-navy">
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">Last Name</label>
+                      <input type="text" name="lastname" class="form-control border-navy" required>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">Email Address</label>
+                      <input type="email" name="email" class="form-control border-navy" required>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">Password</label>
+                      <input type="password" name="password" class="form-control border-navy" required>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">Mobile Number</label>
+                      <input type="text" name="mobile" class="form-control border-navy" required>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">Nationality</label>
+                      <input type="text" name="nationality" class="form-control border-navy" required>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">Sex</label>
+                      <select name="sex" class="form-select border-navy" required>
+                        <option value="">Select</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Prefer not to say">Prefer not to say</option>
+                      </select>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                      <button type="button" class="btn btn-primary" onclick="nextStep(1)">Next</button>
+                    </div>
                   </div>
-                  
-                  <!-- Submit -->
-                  <div class="d-grid mt-4">
-                    <button type="submit" class="btn btn-primary btn-lg fw-bold">Register</button>
+
+                  <!-- STEP 2: Academic Information -->
+                  <div class="step-section" id="step-2">
+                    <h5 class="section-title mt-4">Academic Information</h5>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">Academic Year</label>
+                      <input type="text" name="academic_year" class="form-control border-navy" value="2025-2026" required>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">Academic Term</label>
+                      <select name="academic_term" class="form-select border-navy" required>
+                        <option value="1st Semester">1st Semester</option>
+                        <option value="2nd Semester">2nd Semester</option>
+                        <option value="Summer">Summer</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">Applying For</label>
+                      <select name="applying_for" class="form-select border-navy" required>
+                        <option value="Freshman">Freshman</option>
+                        <option value="Transferee">Transferee</option>
+                        <option value="Cross Enrollee">Cross Enrollee</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">Course Strand</label>
+                      <input type="text" name="strand" class="form-control border-navy">
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">Academic Program</label>
+                      <select name="program" class="form-select border-navy" required>
+                        <option value="">-- Select Program --</option>
+                        <option value="BSCS">BSCS</option>
+                        <option value="BSIT">BSIT</option>
+                        <option value="BSCE">BSCE</option>
+                        <option value="BSArch">BSArch</option>
+                        <option value="BSMT">BSMT</option>
+                        <option value="BSN">BSN</option>
+                        <option value="BSPYS">BSPYS</option>
+                        <option value="BSTM">BSTM</option>
+                        <option value="BSA - Marketing">BSA - Marketing</option>
+                        <option value="BSA - Financial Management">BSA - Financial Management</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">Second Choice of Program</label>
+                      <select name="second_program" class="form-select border-navy" required>
+                        <option value="">-- Select Second Choice Program --</option>
+                        <option value="BSCS">BSCS</option>
+                        <option value="BSIT">BSIT</option>
+                        <option value="BSCE">BSCE</option>
+                        <option value="BSArch">BSArch</option>
+                        <option value="BSMT">BSMT</option>
+                        <option value="BSN">BSN</option>
+                        <option value="BSPYS">BSPYS</option>
+                        <option value="BSTM">BSTM</option>
+                        <option value="BSA - Marketing">BSA - Marketing</option>
+                        <option value="BSA - Financial Management">BSA - Financial Management</option>
+                      </select>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <button type="button" class="btn btn-secondary" onclick="prevStep(2)">Back</button>
+                      <button type="button" class="btn btn-primary" onclick="nextStep(2)">Next</button>
+                    </div>
+                  </div>
+
+                  <!-- STEP 3: Additional Information -->
+                  <div class="step-section" id="step-3">
+                    <h5 class="section-title mt-4">Additional Information</h5>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">Family Annual Income</label>
+                      <input type="text" name="family_income" class="form-control border-navy" required>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">Father's Occupation</label>
+                      <input type="text" name="father_occupation" class="form-control border-navy">
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">Mother's Occupation</label>
+                      <input type="text" name="mother_occupation" class="form-control border-navy">
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">Birthplace</label>
+                      <input type="text" name="birthplace" class="form-control border-navy">
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">City</label>
+                      <input type="text" name="city" class="form-control border-navy">
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">Province</label>
+                      <input type="text" name="province" class="form-control border-navy">
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">Currently Residing At</label>
+                      <input type="text" name="current_address" class="form-control border-navy">
+                    </div>
+                    <div class="mb-3 text-center">
+                      <label class="form-label text-navy">Profile Picture</label>
+                      <div class="mb-2">
+                        <img id="preview" src="uploads/default.png" alt="Preview" class="img-thumbnail" style="max-width:150px; max-height:150px;">
+                      </div>
+                      <input type="file" name="photo" class="form-control border-navy" accept="image/*" onchange="previewImage(event)">
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <button type="button" class="btn btn-secondary" onclick="prevStep(3)">Back</button>
+                      <button type="submit" class="btn btn-success fw-bold">Register</button>
+                      <form id="multiStepForm" action="process_register.php" method="POST" enctype="multipart/form-data">
+                    </div>
                   </div>
 
                 </div>
@@ -247,6 +275,77 @@ include 'connections.php';
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="script.js"></script>
+<script>
+  let currentStep = 1;
+
+  function updateProgress(step) {
+    const progress = document.getElementById("formProgress");
+    const percent = (step / 3) * 100;
+    progress.style.width = percent + "%";
+    progress.textContent = "Step " + step + " of 3";
+  }
+
+  function toggleRequired(step, enable) {
+    const inputs = document.querySelectorAll("#step-" + step + " input, #step-" + step + " select, #step-" + step + " textarea");
+    inputs.forEach(input => {
+      if (enable) {
+        if (input.dataset.originalRequired === "true") input.setAttribute("required", "required");
+      } else {
+        if (input.hasAttribute("required")) {
+          input.dataset.originalRequired = "true";
+          input.removeAttribute("required");
+        }
+      }
+    });
+  }
+
+  function nextStep(step) {
+    const currentSection = document.getElementById("step-" + step);
+    const inputs = currentSection.querySelectorAll("input, select, textarea");
+
+    // Validate required fields in current section
+    for (let input of inputs) {
+      if (input.hasAttribute("required") && !input.value) {
+        alert("Please fill out all required fields before proceeding.");
+        input.focus();
+        return;
+      }
+    }
+
+    // Hide current, show next
+    toggleRequired(step, false);
+    document.getElementById("step-" + step).classList.remove("active");
+    document.getElementById("step-" + (step + 1)).classList.add("active");
+    toggleRequired(step + 1, true);
+
+    currentStep = step + 1;
+    updateProgress(currentStep);
+  }
+
+  function prevStep(step) {
+    toggleRequired(step, false);
+    document.getElementById("step-" + step).classList.remove("active");
+    document.getElementById("step-" + (step - 1)).classList.add("active");
+    toggleRequired(step - 1, true);
+
+    currentStep = step - 1;
+    updateProgress(currentStep);
+  }
+
+  function previewImage(event) {
+    const reader = new FileReader();
+    reader.onload = function() {
+      document.getElementById('preview').src = reader.result;
+    }
+    reader.readAsDataURL(event.target.files[0]);
+  }
+
+  // Init: only step 1 required
+  window.onload = () => {
+    toggleRequired(1, true);
+    toggleRequired(2, false);
+    toggleRequired(3, false);
+  }
+</script>
 </body>
 </html>

@@ -62,11 +62,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_user'])) {
     exit();
 }
 
-// Fetch users with info
+// ✅ Fetch distinct programs for filter dropdown
+$programs = $conn->query("SELECT DISTINCT program FROM user_info WHERE program IS NOT NULL AND program<>'' ORDER BY program ASC");
+
+// ✅ Apply filter if set
+$filter_program = $_GET['program'] ?? '';
 $query = "SELECT users.id, users.email, users.status, user_info.* 
           FROM users 
           LEFT JOIN user_info ON users.id=user_info.user_id";
-$result = $conn->query($query);
+if (!empty($filter_program)) {
+    $stmt = $conn->prepare($query . " WHERE user_info.program=?");
+    $stmt->bind_param("s", $filter_program);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+} else {
+    $result = $conn->query($query);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -94,6 +106,25 @@ $result = $conn->query($query);
       <?= $_SESSION['message']; unset($_SESSION['message']); ?>
     </div>
   <?php endif; ?>
+
+  <!-- ✅ Filter by Course -->
+  <form method="GET" class="mb-4 d-flex justify-content-center">
+    <div class="input-group" style="max-width: 400px;">
+      <label class="input-group-text">Filter by Program</label>
+      <select name="program" class="form-select" onchange="this.form.submit()">
+        <option value="">All Programs</option>
+        <?php while ($p = $programs->fetch_assoc()): ?>
+          <option value="<?= htmlspecialchars($p['program']); ?>" 
+            <?= ($filter_program === $p['program']) ? 'selected' : ''; ?>>
+            <?= htmlspecialchars($p['program']); ?>
+          </option>
+        <?php endwhile; ?>
+      </select>
+      <?php if (!empty($filter_program)): ?>
+        <a href="admin.php" class="btn btn-secondary">Reset</a>
+      <?php endif; ?>
+    </div>
+  </form>
 
   <!-- Student Cards -->
   <div class="row g-4">

@@ -2,9 +2,9 @@
 session_start();
 include 'connections.php';
 
-// Fetch enrolled vs not enrolled students
-$enrolled = $conn->query("SELECT COUNT(*) AS total FROM users WHERE status='Enrolled'")->fetch_assoc()['total'];
-$not_enrolled = $conn->query("SELECT COUNT(*) AS total FROM users WHERE status='Not Enrolled'")->fetch_assoc()['total'];
+// Fetch enrolled vs not enrolled students (students only)
+$enrolled = $conn->query("SELECT COUNT(*) AS total FROM users WHERE status='Enrolled' AND role='student'")->fetch_assoc()['total'];
+$not_enrolled = $conn->query("SELECT COUNT(*) AS total FROM users WHERE status='Not Enrolled' AND role='student'")->fetch_assoc()['total'];
 $total_students = $enrolled + $not_enrolled;
 
 // Percentages
@@ -18,6 +18,7 @@ $students = $conn->query("
            user_info.program, user_info.mobile, user_info.nationality, user_info.likelihood
     FROM users
     LEFT JOIN user_info ON users.id = user_info.user_id
+    WHERE users.role = 'student'
 ");
 ?>
 <!DOCTYPE html>
@@ -203,7 +204,14 @@ $students = $conn->query("
       <div class="filter-box">
         <div class="row">
           <div class="col-md-6">
-            <div class="slider-label">Show students with likelihood ≥ <span id="minValLabel">70%</span></div>
+            <div class="slider-label">
+              Show students with likelihood 
+              <select id="comparisonOperator" class="form-select d-inline w-auto">
+                <option value="gte" selected>≥</option>
+                <option value="lte">≤</option>
+              </select>
+              <span id="minValLabel">70%</span>
+            </div>
             <input type="range" min="0" max="100" value="70" id="minSlider">
           </div>
           <div class="col-md-6">
@@ -287,27 +295,34 @@ $students = $conn->query("
   const minSlider = document.getElementById('minSlider');
   const minValLabel = document.getElementById('minValLabel');
   const statusFilter = document.getElementById('statusFilter');
+  const comparisonOperator = document.getElementById('comparisonOperator');
 
   function filterStudents() {
     const minVal = parseInt(minSlider.value);
+    const operator = comparisonOperator.value;
     const statusVal = statusFilter.value;
     minValLabel.textContent = minVal + '%';
 
     document.querySelectorAll('.student-table tbody tr').forEach(row => {
       const likelihood = parseInt(row.dataset.likelihood);
       const status = row.dataset.status;
-      
-      // Check both filters
-      const likelihoodMatch = likelihood >= minVal;
+
+      let likelihoodMatch = false;
+      if (operator === 'gte') {
+        likelihoodMatch = likelihood >= minVal;
+      } else if (operator === 'lte') {
+        likelihoodMatch = likelihood <= minVal;
+      }
+
       const statusMatch = statusVal === 'all' || status === statusVal;
-      
       row.style.display = (likelihoodMatch && statusMatch) ? '' : 'none';
     });
   }
 
   minSlider.addEventListener('input', filterStudents);
   statusFilter.addEventListener('change', filterStudents);
-  
+  comparisonOperator.addEventListener('change', filterStudents);
+
   // Initialize with default filter
   filterStudents();
 </script>

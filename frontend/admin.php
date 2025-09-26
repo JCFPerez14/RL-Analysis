@@ -23,20 +23,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_user'])) {
     $mobile = $_POST['mobile'] ?? '';
 
     // ✅ Always update status
-    $stmtStatus = $conn->prepare("UPDATE users SET status=? WHERE id=?");
+    $stmtStatus = $conn->prepare("UPDATE users SET status=? WHERE id=? AND role='student'");
     $stmtStatus->bind_param("si", $status, $user_id);
     $stmtStatus->execute();
     $stmtStatus->close();
 
     // ✅ Update email only if not empty and unique
     if (!empty($email)) {
-        $check = $conn->prepare("SELECT id FROM users WHERE email=? AND id<>?");
+        $check = $conn->prepare("SELECT id FROM users WHERE email=? AND id<>? AND role='student'");
         $check->bind_param("si", $email, $user_id);
         $check->execute();
         $check->store_result();
 
         if ($check->num_rows === 0) {
-            $stmtEmail = $conn->prepare("UPDATE users SET email=? WHERE id=?");
+            $stmtEmail = $conn->prepare("UPDATE users SET email=? WHERE id=? AND role='student'");
             $stmtEmail->bind_param("si", $email, $user_id);
             $stmtEmail->execute();
             $stmtEmail->close();
@@ -62,16 +62,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_user'])) {
     exit();
 }
 
-// ✅ Fetch distinct programs for filter dropdown
-$programs = $conn->query("SELECT DISTINCT program FROM user_info WHERE program IS NOT NULL AND program<>'' ORDER BY program ASC");
+// ✅ Fetch distinct programs for filter dropdown (students only)
+$programs = $conn->query("SELECT DISTINCT program 
+                          FROM user_info 
+                          INNER JOIN users ON user_info.user_id = users.id
+                          WHERE users.role='student' AND program IS NOT NULL AND program<>'' 
+                          ORDER BY program ASC");
 
 // ✅ Apply filter if set
 $filter_program = $_GET['program'] ?? '';
 $query = "SELECT users.id, users.email, users.status, user_info.* 
           FROM users 
-          LEFT JOIN user_info ON users.id=user_info.user_id";
+          LEFT JOIN user_info ON users.id=user_info.user_id
+          WHERE users.role='student'";
+
 if (!empty($filter_program)) {
-    $stmt = $conn->prepare($query . " WHERE user_info.program=?");
+    $stmt = $conn->prepare($query . " AND user_info.program=?");
     $stmt->bind_param("s", $filter_program);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -147,8 +153,7 @@ if (!empty($filter_program)) {
                 <select name="status" class="form-select form-select-sm mb-2">
                   <option value="Enrolled" <?= $row['status'] === 'Enrolled' ? 'selected' : ''; ?>>Enrolled</option>
                   <option value="Not Enrolled" <?= $row['status'] === 'Not Enrolled' ? 'selected' : ''; ?>>Not Enrolled</option>
-                  <option value="Pending" <?= $row['status'] === 'Pending' ? 'selected' : ''; ?>>Pending</option>
-                  <option value="Dropped" <?= $row['status'] === 'Dropped' ? 'selected' : ''; ?>>Dropped</option>
+                 
                 </select>
                 <button type="submit" name="update_user" class="btn btn-primary btn-sm">Update</button>
               </form>
@@ -194,21 +199,48 @@ if (!empty($filter_program)) {
                     <label>Mobile</label>
                     <input type="text" name="mobile" value="<?= htmlspecialchars($row['mobile']); ?>" class="form-control">
                   </div>
+
+                  <!-- REPLACED: Program input -> DROPDOWN -->
                   <div class="col-md-6">
                     <label>Program</label>
-                    <input type="text" name="program" value="<?= htmlspecialchars($row['program']); ?>" class="form-control">
+                    <select name="program" class="form-select">
+                      <option value="">-- Select Program --</option>
+                      <option value="BSCS" <?= (isset($row['program']) && $row['program'] === 'BSCS') ? 'selected' : ''; ?>>BSCS</option>
+                      <option value="BSIT" <?= (isset($row['program']) && $row['program'] === 'BSIT') ? 'selected' : ''; ?>>BSIT</option>
+                      <option value="BSCE" <?= (isset($row['program']) && $row['program'] === 'BSCE') ? 'selected' : ''; ?>>BSCE</option>
+                      <option value="BSArch" <?= (isset($row['program']) && $row['program'] === 'BSArch') ? 'selected' : ''; ?>>BSArch</option>
+                      <option value="BSMT" <?= (isset($row['program']) && $row['program'] === 'BSMT') ? 'selected' : ''; ?>>BSMT</option>
+                      <option value="BSN" <?= (isset($row['program']) && $row['program'] === 'BSN') ? 'selected' : ''; ?>>BSN</option>
+                      <option value="BSPYS" <?= (isset($row['program']) && $row['program'] === 'BSPYS') ? 'selected' : ''; ?>>BSPYS</option>
+                      <option value="BSTM" <?= (isset($row['program']) && $row['program'] === 'BSTM') ? 'selected' : ''; ?>>BSTM</option>
+                      <option value="BSA - Marketing" <?= (isset($row['program']) && $row['program'] === 'BSA - Marketing') ? 'selected' : ''; ?>>BSA - Marketing</option>
+                      <option value="BSA - Financial Management" <?= (isset($row['program']) && $row['program'] === 'BSA - Financial Management') ? 'selected' : ''; ?>>BSA - Financial Management</option>
+                    </select>
                   </div>
+
+                  <!-- REPLACED: Second Program input -> DROPDOWN -->
                   <div class="col-md-6">
                     <label>Second Program</label>
-                    <input type="text" name="second_program" value="<?= htmlspecialchars($row['second_program']); ?>" class="form-control">
+                    <select name="second_program" class="form-select">
+                      <option value="">-- Select Second Program --</option>
+                      <option value="BSCS" <?= (isset($row['second_program']) && $row['second_program'] === 'BSCS') ? 'selected' : ''; ?>>BSCS</option>
+                      <option value="BSIT" <?= (isset($row['second_program']) && $row['second_program'] === 'BSIT') ? 'selected' : ''; ?>>BSIT</option>
+                      <option value="BSCE" <?= (isset($row['second_program']) && $row['second_program'] === 'BSCE') ? 'selected' : ''; ?>>BSCE</option>
+                      <option value="BSArch" <?= (isset($row['second_program']) && $row['second_program'] === 'BSArch') ? 'selected' : ''; ?>>BSArch</option>
+                      <option value="BSMT" <?= (isset($row['second_program']) && $row['second_program'] === 'BSMT') ? 'selected' : ''; ?>>BSMT</option>
+                      <option value="BSN" <?= (isset($row['second_program']) && $row['second_program'] === 'BSN') ? 'selected' : ''; ?>>BSN</option>
+                      <option value="BSPYS" <?= (isset($row['second_program']) && $row['second_program'] === 'BSPYS') ? 'selected' : ''; ?>>BSPYS</option>
+                      <option value="BSTM" <?= (isset($row['second_program']) && $row['second_program'] === 'BSTM') ? 'selected' : ''; ?>>BSTM</option>
+                      <option value="BSA - Marketing" <?= (isset($row['second_program']) && $row['second_program'] === 'BSA - Marketing') ? 'selected' : ''; ?>>BSA - Marketing</option>
+                      <option value="BSA - Financial Management" <?= (isset($row['second_program']) && $row['second_program'] === 'BSA - Financial Management') ? 'selected' : ''; ?>>BSA - Financial Management</option>
+                    </select>
                   </div>
+
                   <div class="col-md-6">
                     <label>Status</label>
                     <select name="status" class="form-select">
                       <option value="Enrolled" <?= $row['status'] === 'Enrolled' ? 'selected' : ''; ?>>Enrolled</option>
                       <option value="Not Enrolled" <?= $row['status'] === 'Not Enrolled' ? 'selected' : ''; ?>>Not Enrolled</option>
-                      <option value="Pending" <?= $row['status'] === 'Pending' ? 'selected' : ''; ?>>Pending</option>
-                      <option value="Dropped" <?= $row['status'] === 'Dropped' ? 'selected' : ''; ?>>Dropped</option>
                     </select>
                   </div>
                 </div>

@@ -212,6 +212,22 @@ include 'connections.php';
                         <option value="BSA - Financial Management">BSA - Financial Management</option>
                       </select>
                     </div>
+                    <div class="mb-3">
+                      <label class="form-label text-navy">Third Choice of Program</label>
+                      <select name="third_program" class="form-select border-navy">
+                        <option value="">-- Select Third Choice Program (Optional) --</option>
+                        <option value="BSCS">BSCS</option>
+                        <option value="BSIT">BSIT</option>
+                        <option value="BSCE">BSCE</option>
+                        <option value="BSArch">BSArch</option>
+                        <option value="BSMT">BSMT</option>
+                        <option value="BSN">BSN</option>
+                        <option value="BSPYS">BSPYS</option>
+                        <option value="BSTM">BSTM</option>
+                        <option value="BSA - Marketing">BSA - Marketing</option>
+                        <option value="BSA - Financial Management">BSA - Financial Management</option>
+                      </select>
+                    </div>
                     <div class="d-flex justify-content-between">
                       <button type="button" class="btn btn-secondary" onclick="prevStep(2)">Back</button>
                       <button type="button" class="btn btn-primary" onclick="nextStep(2)">Next</button>
@@ -258,8 +274,10 @@ include 'connections.php';
                     </div>
                     <div class="d-flex justify-content-between">
                       <button type="button" class="btn btn-secondary" onclick="prevStep(3)">Back</button>
-                      <button type="submit" class="btn btn-success fw-bold">Register</button>
-                      <form id="multiStepForm" action="process_register.php" method="POST" enctype="multipart/form-data">
+                      <button type="submit" class="btn btn-success fw-bold" id="registerBtn">
+                        <span id="btnText">Register & Predict Enrollment</span>
+                        <span id="btnSpinner" class="spinner-border spinner-border-sm ms-2" style="display: none;"></span>
+                      </button>
                     </div>
                   </div>
 
@@ -345,6 +363,18 @@ include 'connections.php';
     toggleRequired(1, true);
     toggleRequired(2, false);
     toggleRequired(3, false);
+    
+    // Add form submit handler
+    document.getElementById('multiStepForm').addEventListener('submit', function(e) {
+      const registerBtn = document.getElementById('registerBtn');
+      const btnText = document.getElementById('btnText');
+      const btnSpinner = document.getElementById('btnSpinner');
+      
+      // Show loading state
+      registerBtn.disabled = true;
+      btnText.textContent = 'Processing & Predicting...';
+      btnSpinner.style.display = 'inline-block';
+    });
   }
 </script>
 </body>

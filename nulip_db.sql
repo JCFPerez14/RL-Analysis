@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 19, 2025 at 03:42 PM
+-- Generation Time: Oct 01, 2025 at 07:27 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -119,7 +119,10 @@ INSERT INTO `users` (`id`, `email`, `password`, `role`, `status`, `created_at`) 
 (5, 'dimaanosr@students.nu-lipa.edu.ph', '$2y$10$H9.ijw85VKO7QS2hy6L1fOGdQFcz9BIUl4.TcN5v2/U/.TDvwZPQC', 'admin', 'Enrolled', '2025-09-17 10:17:57'),
 (12, 'ad@gmail.com', '$2y$10$pEJk3E54JcLPOtsWLGSa1ugPmxFpwjFQ1qjIa.GSOvVM6RDqhGnt6', 'admin', 'Not Enrolled', '2025-09-19 03:35:32'),
 (13, '12@gmail.com', '$2y$10$s5K11mojTKluLu7Lrd4rLOfY5oHdfujW9z0rUd9CGZYyYP8kVglya', 'student', 'Not Enrolled', '2025-09-19 10:12:03'),
-(14, 'req@gmail.com', '$2y$10$Tjslh8pXJhJ2uJDEOPtRkO5O6oYQhCgFEfsgoHaQdNNAm0DBn6FDO', 'student', 'Not Enrolled', '2025-09-19 10:30:01');
+(14, 'req@gmail.com', '$2y$10$Tjslh8pXJhJ2uJDEOPtRkO5O6oYQhCgFEfsgoHaQdNNAm0DBn6FDO', 'student', 'Enrolled', '2025-09-19 10:30:01'),
+(15, 'test_ml_1759294739@example.com', '$2y$10$AmCmD6vvGFh3xbffQUjU3uIRkkb2aOJAs5GE6p1NdYIepMro6OF7a', 'student', 'Not Enrolled', '2025-10-01 04:58:59'),
+(16, 'zab@phplord.com', '$2y$10$u72B8W14CPBvBgg27GJZHu6BNaznQr391WDRYs7dy5qSc57s7M30K', 'student', 'Enrolled', '2025-10-01 05:02:07'),
+(17, 'salbahe@students.nu-lipa.edu.ph', '$2y$10$CJYySmJkmCtu2CmAG6ABa.qagxPpDnPkQTvlb.CinvTS4l5nx4MiO', 'student', 'Not Enrolled', '2025-10-01 05:24:32');
 
 -- --------------------------------------------------------
 
@@ -142,6 +145,7 @@ CREATE TABLE `user_info` (
   `strand` varchar(255) DEFAULT NULL,
   `program` varchar(255) DEFAULT NULL,
   `second_program` varchar(255) DEFAULT NULL,
+  `third_program` varchar(255) DEFAULT NULL,
   `family_income` varchar(100) DEFAULT NULL,
   `father_occupation` varchar(255) DEFAULT NULL,
   `mother_occupation` varchar(255) DEFAULT NULL,
@@ -157,12 +161,15 @@ CREATE TABLE `user_info` (
 -- Dumping data for table `user_info`
 --
 
-INSERT INTO `user_info` (`id`, `user_id`, `firstname`, `middlename`, `lastname`, `mobile`, `nationality`, `sex`, `academic_year`, `academic_term`, `applying_for`, `strand`, `program`, `second_program`, `family_income`, `father_occupation`, `mother_occupation`, `birthplace`, `city`, `province`, `current_address`, `photo`, `likelihood`) VALUES
-(1, 3, 'ago', 'afaef', 'aefd', '0495043954', 'Filipino', 'Female', '2025-2026', '1st Semester', 'Freshman', 'STEM', 'BSIT', 'BSCS', '', '', '', '', '', '', 'Tambo, Lipa City', '', 100),
-(2, 4, '', '', '', '', 'Filipino', 'Female', '2025-2026', '1st Semester', 'Freshman', 'STEM', '', '', '', '', '', '', '', '', 'Batangas City, Batangas', '', 80),
-(3, 5, 'Seth', 'm', 'D', '09812345674', 'Filipino', 'Male', '2025-2026', '1st Semester', 'Freshman', 'ABM', 'COM221', '1234', '1,627,000', 'Businessman', 'Businesswoman', 'Granja, Lipa City', 'San Antonio', 'Quezon', 'Pury, San Antonio, Quezon', '', 87),
-(4, 12, 'qwer', '', '', '09783463455', 'Filipino', 'Prefer not to say', '2025-2026', '1st Semester', 'Freshman', 'HUMSS', 'BSA - Marketing', 'BSCE', '', '', '', '', '', '', 'Lipa', 'uploads/1758252932_default.jpg', 78),
-(6, 14, 'Qwerty', 'Reqwe', 'Reda', '09783444556', 'Filipino', 'Male', '2025-2026', '1st Semester', 'Freshman', 'HUMSS', 'BSA - Marketing', 'BSMT', '1,5899', 'None', 'None', 'Lipa', 'Lipa', 'Batangas', 'Lipa', 'uploads/1758277801_default.jpg', 0);
+INSERT INTO `user_info` (`id`, `user_id`, `firstname`, `middlename`, `lastname`, `mobile`, `nationality`, `sex`, `academic_year`, `academic_term`, `applying_for`, `strand`, `program`, `second_program`, `third_program`, `family_income`, `father_occupation`, `mother_occupation`, `birthplace`, `city`, `province`, `current_address`, `photo`, `likelihood`) VALUES
+(1, 3, 'ago', 'afaef', 'aefd', '0495043954', 'Filipino', 'Female', '2025-2026', '1st Semester', 'Freshman', 'STEM', 'BSIT', 'BSCS', NULL, '', '', '', '', '', '', 'Tambo, Lipa City', '', 100),
+(2, 4, '', '', '', '', 'Filipino', 'Female', '2025-2026', '1st Semester', 'Freshman', 'STEM', '', '', NULL, '', '', '', '', '', '', 'Batangas City, Batangas', '', 80),
+(3, 5, 'Seth', 'm', 'D', '09812345674', 'Filipino', 'Male', '2025-2026', '1st Semester', 'Freshman', 'ABM', 'COM221', '1234', NULL, '1,627,000', 'Businessman', 'Businesswoman', 'Granja, Lipa City', 'San Antonio', 'Quezon', 'Pury, San Antonio, Quezon', '', 87),
+(4, 12, 'qwer', '', '', '09783463455', 'Filipino', 'Prefer not to say', '2025-2026', '1st Semester', 'Freshman', 'HUMSS', 'BSA - Marketing', 'BSCE', NULL, '', '', '', '', '', '', 'Lipa', 'uploads/1758252932_default.jpg', 78),
+(6, 14, '', '', '', '', 'Filipino', 'Male', '2025-2026', '1st Semester', 'Freshman', 'HUMSS', '', '', NULL, '1,5899', 'None', 'None', 'Lipa', 'Lipa', 'Batangas', 'Lipa', 'uploads/1758277801_default.jpg', 0),
+(7, 15, 'Juan', 'Santos', 'Cruz', '09123456789', 'Filipino', 'Male', '2025-2026', '1st Semester', 'Freshman', 'STEM', 'BSCS', 'BSIT', NULL, '150000', 'Engineer', 'Teacher', 'Manila', 'Lipa', 'Batangas', 'Lipa City, Batangas', 'uploads/default.png', 79),
+(8, 16, '', '', '', '', 'Filipino', 'Female', '2025-2026', '1st Semester', 'Freshman', 'SACE', '', '', NULL, '1', 'non', 'none', 'Dito', 'Saan', 'Kelan', 'Shoto', 'uploads/1759294927_e373a72e-56d7-470a-a62f-06087014e875.jpg', 66),
+(9, 17, 'Jecel', 'Zab', 'Salvador', '09955783670', 'Filipino', 'Female', '2025-2026', '1st Semester', 'Freshman', '', 'BSTM', 'BSPYS', '', '1', 'none', 'none', 'Dito', 'Saan', 'Kelan', 'Shoto', 'uploads/1759296272_e373a72e-56d7-470a-a62f-06087014e875.jpg', 82);
 
 --
 -- Indexes for dumped tables
@@ -216,13 +223,13 @@ ALTER TABLE `courses`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `user_info`
 --
 ALTER TABLE `user_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables

@@ -90,11 +90,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         (user_id, firstname, middlename, lastname, mobile, nationality, sex, birth_date, academic_year, academic_term, applying_for, strand, program, second_program, previous_school, school_type, family_income, father_occupation, mother_occupation, birthplace, city, province, barangay, current_address, photo, likelihood, province_id, city_id, barangay_id) 
         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
-    $stmt2->bind_param("issssssssssssssssssssssdddd", 
+    // Set initial likelihood to 0.0
+    $initial_likelihood = 0.0;
+    
+    $stmt2->bind_param("issssssssssssssssssssssssdddd", 
         $user_id, $firstname, $middlename, $lastname, $mobile, $nationality, $sex, $birth_date,
         $academic_year, $academic_term, $applying_for, $strand, $program, $second_program,
         $previous_school, $school_type, $family_income, $father_occupation, $mother_occupation, 
-        $birthplace, $city, $province, $barangay, $current_address, $photoPath, 0.0,
+        $birthplace, $city, $province, $barangay, $current_address, $photoPath, $initial_likelihood,
         $province_id, $city_id, $barangay_id
     );
 

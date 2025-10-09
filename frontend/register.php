@@ -851,32 +851,6 @@ include 'connections.php';
     <span>AcademicsPro</span>
   </a>
   
-  <nav class="nav-menu">
-    <a href="index.php" class="nav-item">
-      <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
-      </svg>
-      Home
-    </a>
-    <a href="enrollee.php" class="nav-item">
-      <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
-      </svg>
-      Dashboard
-    </a>
-    <a href="admin.php" class="nav-item">
-      <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
-      </svg>
-      Students
-    </a>
-    <a href="courses.php" class="nav-item">
-      <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-        <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 100 2h.01a1 1 0 100-2H10zm-4 1a1 1 0 011-1h.01a1 1 0 110 2H7a1 1 0 01-1-1zm1-4a1 1 0 100 2h.01a1 1 0 100-2H7zm2 0a1 1 0 100 2h.01a1 1 0 100-2H9zm2 0a1 1 0 100 2h.01a1 1 0 100-2h-.01z"/>
-      </svg>
-      Courses
-    </a>
-</nav>
 
   <div class="header-actions">
     <a href="login.php" class="btn-login">Login</a>
@@ -981,7 +955,21 @@ include 'connections.php';
             </div>
           </div>
 
-          <!-- Row 3: Date of Birth & Phone Number -->
+          <!-- Row 3: Password & Confirm Password -->
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Password</label>
+              <input type="password" name="password" id="password" class="form-control" placeholder="Enter your password" required>
+              <small class="form-text">Must be at least 8 characters long</small>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Confirm Password</label>
+              <input type="password" name="confirm_password" id="confirm_password" class="form-control" placeholder="Confirm your password" required>
+              <small class="form-text">Re-enter your password to confirm</small>
+            </div>
+          </div>
+
+          <!-- Row 4: Date of Birth & Phone Number -->
           <div class="form-grid">
             <div class="form-group">
               <label class="form-label">Date of Birth</label>
@@ -993,7 +981,7 @@ include 'connections.php';
             </div>
           </div>
 
-          <!-- Row 4: Sex & Birthplace -->
+          <!-- Row 5: Sex & Birthplace -->
           <div class="form-grid">
             <div class="form-group">
               <label class="form-label">Sex</label>
@@ -1015,14 +1003,7 @@ include 'connections.php';
             <div class="form-group">
               <label class="form-label">Province</label>
               <select name="province" id="province" class="form-select" required onchange="updateCities()">
-                <option value="">Select Province</option>
-                <?php
-                include 'connections.php';
-                $result = $conn->query("SELECT id, province_name FROM provinces ORDER BY province_name");
-                while ($row = $result->fetch_assoc()) {
-                    echo "<option value='{$row['id']}'>{$row['province_name']}</option>";
-                }
-                ?>
+                <option value="">Loading provinces...</option>
               </select>
             </div>
             <div class="form-group">
@@ -1179,18 +1160,25 @@ include 'connections.php';
           <div class="form-grid">
             <div class="form-group">
               <label class="form-label">Annual Family Income</label>
-              <input type="text" name="family_income" class="form-control" placeholder="e.g., 50000" required>
+              <select name="family_income" class="form-select" required>
+                <option value="">Select Income Range</option>
+                <option value="0-25,000">₱0 - ₱25,000</option>
+                <option value="25,000-50,000">₱25,000 - ₱50,000</option>
+                <option value="50,000-75,000">₱50,000 - ₱75,000</option>
+                <option value="Above 75,000">Above ₱75,000</option>
+                <option value="Prefer not to say">Prefer not to say</option>
+              </select>
             </div>
             <div class="form-group">
-              <label class="form-label">Parent 1 Occupation</label>
+              <label class="form-label">Father's Occupation</label>
               <input type="text" name="father_occupation" class="form-control" placeholder="Enter occupation">
             </div>
           </div>
 
-          <!-- Row 2: Parent 2 Occupation (Full Width) -->
+          <!-- Row 2: Mother's Occupation (Full Width) -->
           <div class="form-grid full-width">
             <div class="form-group">
-              <label class="form-label">Parent 2 Occupation</label>
+              <label class="form-label">Mother's Occupation</label>
               <input type="text" name="mother_occupation" class="form-control" placeholder="Enter occupation (or N/A)">
             </div>
           </div>
@@ -1237,7 +1225,6 @@ include 'connections.php';
         </div>
 
         <!-- Hidden fields for compatibility -->
-        <input type="hidden" name="password" value="default123">
         <input type="hidden" name="nationality" value="Filipino">
         <input type="hidden" name="current_address" value="">
             </form>
@@ -1279,10 +1266,70 @@ include 'connections.php';
     }
   });
 
-  // Database-driven location management (no PSA API needed)
+  // PSA API Configuration
+  const PSA_API_BASE = 'https://psgc.gitlab.io/api';
+  
+  // Cache for API data to avoid repeated requests
+  let provincesCache = null;
+  let citiesCache = {};
+  let barangaysCache = {};
 
-  // Update cities based on selected province using database
-  function updateCities() {
+  // Initialize provinces dropdown from PSA API
+  async function initializeProvinces() {
+    const provinceSelect = document.getElementById('province');
+    
+    try {
+      // Show loading state
+      provinceSelect.innerHTML = '<option value="">Loading provinces...</option>';
+      
+      // Check cache first
+      if (provincesCache) {
+        populateProvinceOptions(provincesCache);
+        return;
+      }
+      
+      const response = await fetch(`${PSA_API_BASE}/provinces/`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      provincesCache = data;
+      populateProvinceOptions(data);
+      
+    } catch (error) {
+      console.error('Error loading provinces:', error);
+      provinceSelect.innerHTML = '<option value="">Error loading provinces</option>';
+    }
+  }
+
+  // Populate province options
+  function populateProvinceOptions(provinces) {
+    const provinceSelect = document.getElementById('province');
+    provinceSelect.innerHTML = '<option value="">Select Province</option>';
+    
+    // Sort provinces alphabetically
+    const sortedProvinces = provinces.sort((a, b) => a.name.localeCompare(b.name));
+    
+    sortedProvinces.forEach(province => {
+      const option = document.createElement('option');
+      option.value = province.code;
+      option.textContent = province.name;
+      option.setAttribute('data-name', province.name);
+      provinceSelect.appendChild(option);
+    });
+    
+    // Add special option for NCR/Metro Manila cities (cities with empty provinceCode)
+    const ncrOption = document.createElement('option');
+    ncrOption.value = ''; // Empty value to match empty provinceCode
+    ncrOption.textContent = 'National Capital Region (NCR)';
+    ncrOption.setAttribute('data-name', 'National Capital Region (NCR)');
+    provinceSelect.appendChild(ncrOption);
+  }
+
+  // Update cities based on selected province using PSA API
+  async function updateCities() {
     console.log('updateCities function called');
     
     const provinceSelect = document.getElementById('province');
@@ -1303,109 +1350,140 @@ include 'connections.php';
     citySelect.disabled = true;
     barangaySelect.disabled = true;
     
-    const selectedProvinceId = provinceSelect.value;
-    console.log('Selected province ID:', selectedProvinceId);
+    const selectedProvinceCode = provinceSelect.value;
+    console.log('Selected province code:', selectedProvinceCode);
     
-    if (!selectedProvinceId) {
+    if (!selectedProvinceCode) {
       citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
       return;
     }
     
-    // Use XMLHttpRequest for better compatibility
-    const xhr = new XMLHttpRequest();
-    const url = `./get_cities.php?province_id=${selectedProvinceId}`;
-    console.log('Making request to:', url);
-    
-    xhr.open('GET', url, true);
-    xhr.onreadystatechange = function() {
-      console.log('XHR readyState:', xhr.readyState, 'status:', xhr.status);
-      
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          console.log('Response received:', xhr.responseText);
-          
-          try {
-            const cities = JSON.parse(xhr.responseText);
-            console.log('Parsed cities:', cities);
-            
-            citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
-            
-            cities.forEach(city => {
-              const option = document.createElement('option');
-              option.value = city.id;
-              option.textContent = city.city_name;
-              citySelect.appendChild(option);
-              console.log('Added city:', city.city_name, 'ID:', city.id);
-            });
-            
-            citySelect.disabled = false;
-            console.log('Cities loaded successfully');
-          } catch (error) {
-            console.error('Error parsing cities:', error);
-            citySelect.innerHTML = '<option value="">Error loading cities</option>';
-          }
-        } else {
-          console.error('HTTP error:', xhr.status);
-          citySelect.innerHTML = '<option value="">Error loading cities</option>';
-        }
+    try {
+      // Check cache first
+      if (citiesCache[selectedProvinceCode]) {
+        populateCityOptions(citiesCache[selectedProvinceCode]);
+        citySelect.disabled = false;
+        return;
       }
-    };
-    
-    xhr.onerror = function() {
-      console.error('XHR error occurred');
-      citySelect.innerHTML = '<option value="">Network error</option>';
-    };
-    
-    console.log('Sending XHR request...');
-    xhr.send();
+      
+      console.log('Fetching cities from PSA API...');
+      const response = await fetch(`${PSA_API_BASE}/cities-municipalities/`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const allCities = await response.json();
+      console.log('All cities received:', allCities.length);
+      
+      // Filter cities by province code (handle empty provinceCode for NCR cities)
+      const provinceCities = allCities.filter(city => 
+        city.provinceCode === selectedProvinceCode || 
+        (selectedProvinceCode === '' && !city.provinceCode) // Handle NCR cities
+      );
+      console.log('Filtered cities for province:', provinceCities.length);
+      
+      // Cache the results
+      citiesCache[selectedProvinceCode] = provinceCities;
+      
+      populateCityOptions(provinceCities);
+      citySelect.disabled = false;
+      
+    } catch (error) {
+      console.error('Error loading cities:', error);
+      citySelect.innerHTML = '<option value="">Error loading cities</option>';
+    }
   }
 
 
-  // Update barangays based on selected city using database
-  function updateBarangays() {
+  // Populate city options
+  function populateCityOptions(cities) {
+    const citySelect = document.getElementById('city');
+    citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
+    
+    // Sort cities alphabetically
+    const sortedCities = cities.sort((a, b) => a.name.localeCompare(b.name));
+    
+    sortedCities.forEach(city => {
+      const option = document.createElement('option');
+      option.value = city.code;
+      option.textContent = city.name;
+      option.setAttribute('data-name', city.name);
+      citySelect.appendChild(option);
+    });
+  }
+
+  // Update barangays based on selected city using PSA API
+  async function updateBarangays() {
+    console.log('updateBarangays function called');
+    
     const citySelect = document.getElementById('city');
     const barangaySelect = document.getElementById('barangay');
     
     // Clear barangay options
     barangaySelect.innerHTML = '<option value="">Loading barangays...</option>';
+    barangaySelect.disabled = true;
     
-    const selectedCityId = citySelect.value;
+    const selectedCityCode = citySelect.value;
+    console.log('Selected city code:', selectedCityCode);
     
-    if (!selectedCityId) {
+    if (!selectedCityCode) {
       barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-      barangaySelect.disabled = true;
       return;
     }
     
-    // Use XMLHttpRequest for better compatibility
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', `./get_barangays.php?city_id=${selectedCityId}`, true);
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          try {
-            const barangays = JSON.parse(xhr.responseText);
-            barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
-            
-            barangays.forEach(barangay => {
-              const option = document.createElement('option');
-              option.value = barangay.id;
-              option.textContent = barangay.barangay_name;
-              barangaySelect.appendChild(option);
-            });
-            
-            barangaySelect.disabled = false;
-          } catch (error) {
-            console.error('Error parsing barangays:', error);
-            barangaySelect.innerHTML = '<option value="">Error loading barangays</option>';
-          }
-        } else {
-          console.error('HTTP error:', xhr.status);
-          barangaySelect.innerHTML = '<option value="">Error loading barangays</option>';
-        }
+    try {
+      // Check cache first
+      if (barangaysCache[selectedCityCode]) {
+        populateBarangayOptions(barangaysCache[selectedCityCode]);
+        barangaySelect.disabled = false;
+        return;
       }
-    };
-    xhr.send();
+      
+      console.log('Fetching barangays from PSA API...');
+      const response = await fetch(`${PSA_API_BASE}/barangays/`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const allBarangays = await response.json();
+      console.log('All barangays received:', allBarangays.length);
+      
+      // Filter barangays by city code (check both cityCode and municipalityCode)
+      const cityBarangays = allBarangays.filter(barangay => 
+        barangay.cityCode === selectedCityCode || 
+        barangay.municipalityCode === selectedCityCode
+      );
+      console.log('Filtered barangays for city:', cityBarangays.length);
+      
+      // Cache the results
+      barangaysCache[selectedCityCode] = cityBarangays;
+      
+      populateBarangayOptions(cityBarangays);
+      barangaySelect.disabled = false;
+      
+    } catch (error) {
+      console.error('Error loading barangays:', error);
+      barangaySelect.innerHTML = '<option value="">Error loading barangays</option>';
+    }
+  }
+
+  // Populate barangay options
+  function populateBarangayOptions(barangays) {
+    const barangaySelect = document.getElementById('barangay');
+    barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+    
+    // Sort barangays alphabetically
+    const sortedBarangays = barangays.sort((a, b) => a.name.localeCompare(b.name));
+    
+    sortedBarangays.forEach(barangay => {
+      const option = document.createElement('option');
+      option.value = barangay.code;
+      option.textContent = barangay.name;
+      option.setAttribute('data-name', barangay.name);
+      barangaySelect.appendChild(option);
+    });
   }
 
 
@@ -1458,7 +1536,10 @@ include 'connections.php';
   const totalSteps = 4;
 
   // Form validation and submission handler
-  window.onload = () => {
+  window.onload = async () => {
+    // Initialize provinces dropdown from PSA API
+    await initializeProvinces();
+    
     // Initialize phone number validation
     validatePhoneNumber();
     

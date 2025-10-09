@@ -24,32 +24,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $father_occupation = $_POST['father_occupation'];
     $mother_occupation = $_POST['mother_occupation'];
     $birthplace = $_POST['birthplace'];
-    $province_id = $_POST['province'];
-    $city_id = $_POST['city'];
-    $barangay_id = $_POST['barangay'];
+    $province_code = $_POST['province'];
+    $city_code = $_POST['city'];
+    $barangay_code = $_POST['barangay'];
     $current_address = $_POST['current_address'];
     
-    // Get the text values for backward compatibility
-    $stmt_province = $conn->prepare("SELECT province_name FROM provinces WHERE id = ?");
-    $stmt_province->bind_param("i", $province_id);
-    $stmt_province->execute();
-    $result = $stmt_province->get_result();
-    $province = $result->fetch_assoc()['province_name'] ?? '';
-    $stmt_province->close();
+    // For PSA API, we'll store the codes directly and get names from the API
+    // For now, we'll use the codes as the display values
+    $province = $province_code; // Will be updated with actual name
+    $city = $city_code; // Will be updated with actual name
+    $barangay = $barangay_code; // Will be updated with actual name
     
-    $stmt_city = $conn->prepare("SELECT city_name FROM cities WHERE id = ?");
-    $stmt_city->bind_param("i", $city_id);
-    $stmt_city->execute();
-    $result = $stmt_city->get_result();
-    $city = $result->fetch_assoc()['city_name'] ?? '';
-    $stmt_city->close();
-    
-    $stmt_barangay = $conn->prepare("SELECT barangay_name FROM barangays WHERE id = ?");
-    $stmt_barangay->bind_param("i", $barangay_id);
-    $stmt_barangay->execute();
-    $result = $stmt_barangay->get_result();
-    $barangay = $result->fetch_assoc()['barangay_name'] ?? '';
-    $stmt_barangay->close();
+    // Get actual names from PSA API (optional - for better display)
+    // For now, we'll store the codes and display them
 
     // ✅ Handle file upload
     $photoPath = "uploads/default.png"; // default
@@ -87,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // ✅ Insert into user_info (with all new fields including location IDs)
     $stmt2 = $conn->prepare("INSERT INTO user_info 
-        (user_id, firstname, middlename, lastname, mobile, nationality, sex, birth_date, academic_year, academic_term, applying_for, strand, program, second_program, previous_school, school_type, family_income, father_occupation, mother_occupation, birthplace, city, province, barangay, current_address, photo, likelihood, province_id, city_id, barangay_id) 
+        (user_id, firstname, middlename, lastname, mobile, nationality, sex, birth_date, academic_year, academic_term, applying_for, strand, program, second_program, previous_school, school_type, family_income, father_occupation, mother_occupation, birthplace, city, province, barangay, current_address, photo, likelihood, province_code, city_code, barangay_code) 
         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
     // Set initial likelihood to 0.0
@@ -98,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $academic_year, $academic_term, $applying_for, $strand, $program, $second_program,
         $previous_school, $school_type, $family_income, $father_occupation, $mother_occupation, 
         $birthplace, $city, $province, $barangay, $current_address, $photoPath, $initial_likelihood,
-        $province_id, $city_id, $barangay_id
+        $province_code, $city_code, $barangay_code
     );
 
     if ($stmt2->execute()) {
@@ -113,8 +100,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt3->close();
         }
         
-        // Success - redirect to login page
-        header("Location: login.php?success=1");
+        // Success - redirect to official NU LIPA registration
+        header("Location: https://onlineapp.nu-lipa.edu.ph/quest/home.php");
         exit();
     } else {
         // Error in user_info insertion - clean up user record and show error

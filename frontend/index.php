@@ -326,32 +326,6 @@ include 'connections.php';
     <span>AcademicsPro</span>
   </a>
   
-  <nav class="nav-menu">
-    <a href="index.php" class="nav-item active">
-      <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
-      </svg>
-      Home
-    </a>
-    <a href="enrollee.php" class="nav-item">
-      <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
-      </svg>
-      Dashboard
-    </a>
-    <a href="admin.php" class="nav-item">
-      <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
-      </svg>
-      Students
-    </a>
-    <a href="courses.php" class="nav-item">
-      <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-        <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 100 2h.01a1 1 0 100-2H10zm-4 1a1 1 0 011-1h.01a1 1 0 110 2H7a1 1 0 01-1-1zm1-4a1 1 0 100 2h.01a1 1 0 100-2H7zm2 0a1 1 0 100 2h.01a1 1 0 100-2H9zm2 0a1 1 0 100 2h.01a1 1 0 100-2h-.01z"/>
-      </svg>
-      Courses
-    </a>
-  </nav>
   
   <div class="header-actions">
     <?php if (isset($_SESSION['user'])): ?>
@@ -400,11 +374,11 @@ include 'connections.php';
           Login
         </a>
       <?php else: ?>
-        <a href="details.php" class="btn-hero btn-dashboard">
+        <a href="https://onlineapp.nu-lipa.edu.ph/quest/home.php" class="btn-hero btn-register" target="_blank">
           <svg class="btn-icon" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+            <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"/>
           </svg>
-          View Dashboard
+          Continue Registration
         </a>
       <?php endif; ?>
     </div>

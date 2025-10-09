@@ -11,20 +11,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $mobile = $_POST['mobile'];
     $nationality = $_POST['nationality'];
     $sex = $_POST['sex'];
+    $birth_date = $_POST['birth_date'];
     $academic_year = $_POST['academic_year'];
     $academic_term = $_POST['academic_term'];
     $applying_for = $_POST['applying_for'];
     $strand = $_POST['strand'];
     $program = $_POST['program'];
     $second_program = $_POST['second_program'];
-    $third_program = isset($_POST['third_program']) ? $_POST['third_program'] : '';
+    $previous_school = $_POST['previous_school'];
+    $school_type = $_POST['school_type'];
     $family_income = $_POST['family_income'];
     $father_occupation = $_POST['father_occupation'];
     $mother_occupation = $_POST['mother_occupation'];
     $birthplace = $_POST['birthplace'];
-    $city = $_POST['city'];
-    $province = $_POST['province'];
+    $province_id = $_POST['province'];
+    $city_id = $_POST['city'];
+    $barangay_id = $_POST['barangay'];
     $current_address = $_POST['current_address'];
+    
+    // Get the text values for backward compatibility
+    $stmt_province = $conn->prepare("SELECT province_name FROM provinces WHERE id = ?");
+    $stmt_province->bind_param("i", $province_id);
+    $stmt_province->execute();
+    $result = $stmt_province->get_result();
+    $province = $result->fetch_assoc()['province_name'] ?? '';
+    $stmt_province->close();
+    
+    $stmt_city = $conn->prepare("SELECT city_name FROM cities WHERE id = ?");
+    $stmt_city->bind_param("i", $city_id);
+    $stmt_city->execute();
+    $result = $stmt_city->get_result();
+    $city = $result->fetch_assoc()['city_name'] ?? '';
+    $stmt_city->close();
+    
+    $stmt_barangay = $conn->prepare("SELECT barangay_name FROM barangays WHERE id = ?");
+    $stmt_barangay->bind_param("i", $barangay_id);
+    $stmt_barangay->execute();
+    $result = $stmt_barangay->get_result();
+    $barangay = $result->fetch_assoc()['barangay_name'] ?? '';
+    $stmt_barangay->close();
 
     // ✅ Handle file upload
     $photoPath = "uploads/default.png"; // default
@@ -40,6 +65,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
+    // ✅ Check if email already exists
+    $checkStmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
+    $checkStmt->bind_param("s", $email);
+    $checkStmt->execute();
+    $result = $checkStmt->get_result();
+    
+    if ($result->num_rows > 0) {
+        // Redirect back to registration form with error message
+        header("Location: register.php?error=email_exists");
+        exit();
+    }
+    $checkStmt->close();
+
     // ✅ Insert into users
     $stmt = $conn->prepare("INSERT INTO users (email, password, status) VALUES (?, ?, 'Not Enrolled')");
     $stmt->bind_param("ss", $email, $password);
@@ -47,39 +85,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_id = $stmt->insert_id;
     $stmt->close();
 
-    // ✅ Insert into user_info (with photo and third_program)
+    // ✅ Insert into user_info (with all new fields including location IDs)
     $stmt2 = $conn->prepare("INSERT INTO user_info 
-        (user_id, firstname, middlename, lastname, mobile, nationality, sex, academic_year, academic_term, applying_for, strand, program, second_program, third_program, family_income, father_occupation, mother_occupation, birthplace, city, province, current_address, photo) 
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        (user_id, firstname, middlename, lastname, mobile, nationality, sex, birth_date, academic_year, academic_term, applying_for, strand, program, second_program, previous_school, school_type, family_income, father_occupation, mother_occupation, birthplace, city, province, barangay, current_address, photo, likelihood, province_id, city_id, barangay_id) 
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
-    $stmt2->bind_param("isssssssssssssssssssss", 
-        $user_id, $firstname, $middlename, $lastname, $mobile, $nationality, $sex,
-        $academic_year, $academic_term, $applying_for, $strand, $program, $second_program, $third_program,
-        $family_income, $father_occupation, $mother_occupation, $birthplace, $city, $province,
-        $current_address, $photoPath
+    $stmt2->bind_param("issssssssssssssssssssssdddd", 
+        $user_id, $firstname, $middlename, $lastname, $mobile, $nationality, $sex, $birth_date,
+        $academic_year, $academic_term, $applying_for, $strand, $program, $second_program,
+        $previous_school, $school_type, $family_income, $father_occupation, $mother_occupation, 
+        $birthplace, $city, $province, $barangay, $current_address, $photoPath, 0.0,
+        $province_id, $city_id, $barangay_id
     );
 
     if ($stmt2->execute()) {
         // ✅ Calculate enrollment likelihood using Python XGBoost model
-        $likelihood = calculateEnrollmentLikelihoodML($program, $second_program, $third_program, $applying_for, $strand, $family_income, $sex, $nationality);
+        $likelihood = calculateEnrollmentLikelihoodML($program, $second_program, $applying_for, $strand, $family_income, $sex, $nationality);
         
-        // ✅ Update user_info with likelihood
-        if ($likelihood !== null) {
+        // ✅ Update user_info with calculated likelihood (if ML calculation succeeds)
+        if ($likelihood !== null && $likelihood > 0) {
             $stmt3 = $conn->prepare("UPDATE user_info SET likelihood = ? WHERE user_id = ?");
             $stmt3->bind_param("di", $likelihood, $user_id);
             $stmt3->execute();
             $stmt3->close();
         }
         
-        // Success - redirect or return success
-        if (!headers_sent()) {
-            header("Location: login.php?success=1");
-            exit();
-        } else {
-            echo "Registration successful! Predicted enrollment likelihood: " . $likelihood . "%";
-        }
+        // Success - redirect to login page
+        header("Location: login.php?success=1");
+        exit();
     } else {
-        echo "Error: " . $stmt2->error;
+        // Error in user_info insertion - clean up user record and show error
+        $conn->query("DELETE FROM users WHERE id = $user_id");
+        header("Location: register.php?error=registration_failed");
+        exit();
     }
 
     $stmt2->close();
@@ -92,13 +130,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
  * Calculate enrollment likelihood using Python XGBoost ML model
  * Uses the 88p_sir_ap_best_enrollment_model.pkl
  */
-function calculateEnrollmentLikelihoodML($program, $second_program, $third_program, $applying_for, $strand, $family_income, $sex, $nationality) {
+function calculateEnrollmentLikelihoodML($program, $second_program, $applying_for, $strand, $family_income, $sex, $nationality) {
     try {
         // Prepare data for the Python script
         $inputData = [
             'program' => $program,
             'second_program' => $second_program,
-            'third_program' => $third_program,
             'applying_for' => $applying_for,
             'strand' => $strand,
             'family_income' => $family_income,
@@ -131,7 +168,6 @@ with open('" . $tempFile . "', 'r') as f:
 likelihood = calculate_likelihood_from_programs(
     data.get('program', ''),
     data.get('second_program', ''),
-    data.get('third_program', ''),
     data.get('applying_for', 'Freshman'),
     data.get('family_income', '50000'),
     data.get('sex', 'Female'),

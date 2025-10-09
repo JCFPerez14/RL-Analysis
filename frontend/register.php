@@ -6,375 +6,1705 @@ include 'connections.php';
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Register - National University - Lipa</title>
+  <title>Register - AcademicsPro</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
   <style>
-    /* Navbar */
-    .bg-navy { background-color: #001f3f; }
-    .text-golden { color: #FFD700; }
-    .text-navy { color: #001f3f; }
-    .border-navy { border-color: #001f3f; }
-
-    /* Hero Section */
-    .hero {
-      background: url('images/bg.jpg') no-repeat center center fixed;
-      background-size: cover;
-      min-height: 100vh;
+    body {
+      background: #f8fafc;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #374151;
+      margin: 0;
+      padding: 0;
+    }
+    
+    /* Header Styles */
+    .header-bar {
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 1rem 2rem;
       display: flex;
-      align-items: flex-start;
-    }
-    .form-scroll {
-      max-height: 83vh;
-      overflow-y: auto;
-      padding-right: 10px;
-      padding-left: 10px;
-    }
-
-    /* Section Titles */
-    .section-title {
-      color: #001f3f;
-      border-bottom: 2px solid #FFD700;
-      padding-bottom: 5px;
-      margin-bottom: 15px;
-      font-weight: bold;
-    }
-
-    /* Progress Bar */
-    .progress-container {
+      align-items: center;
+      justify-content: space-between;
       position: sticky;
       top: 0;
-      z-index: 1000;
-      background: #fff;
-      padding: 10px 0;
+      z-index: 100;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     }
-    .progress-bar {
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1f2937;
+      text-decoration: none;
+    }
+    
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.25rem;
+    }
+    
+    .nav-menu {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #6b7280;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    
+    .nav-item.active {
+      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      color: white;
+    }
+    
+    .nav-item:hover:not(.active) {
+      background: #f3f4f6;
+      color: #374151;
+    }
+    
+    .nav-icon {
+      width: 20px;
       height: 20px;
-      background-color: #FFD700;
-      color: #001f3f;
-      font-weight: bold;
-      text-align: center;
-      line-height: 20px;
     }
-    .step-section { display: none; }
-    .step-section.active { display: block; }
+    
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .user-profile-dropdown {
+      position: relative;
+    }
+    
+    .user-profile {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .user-profile:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 8px rgba(0, 31, 84, 0.3);
+    }
+    
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      min-width: 200px;
+      z-index: 1000;
+      display: none;
+      margin-top: 0.5rem;
+    }
+    
+    .dropdown-menu.show {
+      display: block;
+    }
+    
+    .dropdown-header {
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #1f2937;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    
+    .dropdown-divider {
+      height: 1px;
+      background: #e5e7eb;
+      margin: 0;
+    }
+    
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      color: #374151;
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+    }
+    
+    .dropdown-item:hover {
+      background: #f9fafb;
+      color: #1f2937;
+    }
+    
+    .dropdown-icon {
+      width: 16px;
+      height: 16px;
+    }
+    
+    .btn-login {
+      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-login:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0, 31, 84, 0.3);
+      color: white;
+    }
+    
+    .btn-register {
+      background: white;
+      color: #001f54;
+      border: 2px solid #001f54;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-register:hover {
+      background: #001f54;
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    /* Registration Form */
+    .registration-container {
+      padding: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .registration-card {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border: 1px solid #e5e7eb;
+      overflow: hidden;
+    }
+    
+    .form-header {
+      padding: 3rem 2rem 2rem;
+      text-align: center;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    
+    .form-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #1f2937;
+    }
+    
+    .form-subtitle {
+      font-size: 1.125rem;
+      color: #6b7280;
+      font-weight: 400;
+    }
+
+    /* Profile Picture Section */
+    .profile-section {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    
+    .profile-picture {
+      width: 120px;
+      height: 120px;
+      border: 3px solid #ffcc00;
+      border-radius: 50%;
+      background: #f9fafb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .profile-picture:hover {
+      border-color: #001f54;
+      transform: scale(1.05);
+    }
+    
+    .profile-placeholder {
+      width: 60px;
+      height: 60px;
+      background: #e5e7eb;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    
+    .camera-icon {
+      width: 24px;
+      height: 24px;
+      color: #001f54;
+      position: absolute;
+      bottom: -8px;
+      right: -8px;
+      background: white;
+      border-radius: 50%;
+      padding: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .profile-preview {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    /* Form Content */
+    .form-content {
+      padding: 0 2rem 3rem;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-grid.full-width {
+      grid-template-columns: 1fr;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .form-label {
+      color: #374151;
+      font-weight: 600;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .form-control, .form-select {
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 0.875rem 1rem;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+      background: #f9fafb;
+    }
+    
+    .form-control:focus, .form-select:focus {
+      border-color: #001f54;
+      box-shadow: 0 0 0 3px rgba(0, 31, 84, 0.1);
+      outline: none;
+      background: #ffffff;
+    }
+    
+    .form-control:hover, .form-select:hover {
+      border-color: #d1d5db;
+      background: #ffffff;
+    }
+    
+    .form-control::placeholder {
+      color: #9ca3af;
+    }
+    
+    .form-select {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.75rem center;
+      background-repeat: no-repeat;
+      background-size: 1rem;
+      padding-right: 2.5rem;
+    }
+    
+    .form-select:disabled {
+      background-color: #f3f4f6;
+      color: #9ca3af;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    /* Register Button */
+    .register-button {
+      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 1rem 3rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: block;
+      margin: 2rem auto 0;
+      min-width: 200px;
+    }
+    
+    .register-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 31, 84, 0.3);
+    }
+    
+    .register-button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Hidden File Input */
+    .file-input {
+      display: none;
+    }
+
+    /* Loading States */
+    .btn-loading {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    
+    .spinner-border-sm {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    /* Form Sections */
+    .form-section {
+      margin-bottom: 3rem;
+      padding: 2rem;
+      background: #f8fafc;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .section-header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-subtitle {
+      color: #6b7280;
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    /* Validation Section */
+    .validation-section {
+      background: #fef3c7;
+      border-color: #f59e0b;
+    }
+
+    .validation-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+
+    .validation-item {
+      background: #ffffff;
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .validation-item.complete {
+      border-color: #10b981;
+      background: #f0fdf4;
+    }
+
+    .validation-item.incomplete {
+      border-color: #f59e0b;
+      background: #fffbeb;
+    }
+
+    .validation-item h4 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #374151;
+      margin: 0 0 0.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .validation-item .icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    .validation-item.complete .icon {
+      color: #10b981;
+    }
+
+    .validation-item.incomplete .icon {
+      color: #f59e0b;
+    }
+
+    .validation-item p {
+      font-size: 0.75rem;
+      color: #6b7280;
+      margin: 0;
+    }
+
+    /* Terms Agreement */
+    .terms-section {
+      background: #f9fafb;
+      border-color: #d1d5db;
+    }
+
+    .terms-agreement {
+      text-align: center;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-top: 0.125rem;
+      accent-color: #001f54;
+    }
+
+    .terms-label {
+      font-size: 0.875rem;
+      color: #374151;
+      line-height: 1.5;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .terms-link {
+      color: #001f54;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .terms-link:hover {
+      text-decoration: underline;
+    }
+
+    .terms-error {
+      color: #dc2626;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-top: 0.5rem;
+      padding: 0.75rem;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+    }
+
+    /* Readonly field styling */
+    .form-control[readonly] {
+      background-color: #f3f4f6;
+      color: #6b7280;
+      cursor: not-allowed;
+    }
+
+    .form-control[readonly]:focus {
+      border-color: #d1d5db;
+      box-shadow: none;
+    }
+
+    /* Progress Bar Styles */
+    .progress-container {
+      margin: 2rem 0;
+      padding: 0 2rem;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: #e5e7eb;
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #001f54, #1d4ed8);
+      border-radius: 3px;
+      transition: width 0.5s ease;
+      position: relative;
+    }
+
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 20px;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-20px); }
+      100% { transform: translateX(20px); }
+    }
+
+    .progress-steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .progress-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      flex: 1;
+    }
+
+    .progress-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      right: -50%;
+      height: 2px;
+      background: #e5e7eb;
+      z-index: 1;
+    }
+
+    .progress-step.completed:not(:last-child)::after {
+      background: #001f54;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e5e7eb;
+      color: #6b7280;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 2;
+      transition: all 0.3s ease;
+    }
+
+    .progress-step.active .step-number {
+      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      color: white;
+      box-shadow: 0 4px 8px rgba(0, 31, 84, 0.3);
+      transform: scale(1.1);
+    }
+
+    .progress-step.completed .step-number {
+      background: #10b981;
+      color: white;
+    }
+
+    .step-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #6b7280;
+      text-align: center;
+      max-width: 80px;
+      line-height: 1.2;
+    }
+
+    .progress-step.active .step-label {
+      color: #001f54;
+    }
+
+    .progress-step.completed .step-label {
+      color: #10b981;
+    }
+
+    /* Step Navigation */
+    .step-navigation {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .btn-previous, .btn-next, .btn-submit {
+      padding: 0.875rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      min-width: 120px;
+    }
+
+    .btn-previous {
+      background: #ffffff;
+      color: #6b7280;
+      border: 2px solid #e5e7eb;
+    }
+
+    .btn-previous:hover {
+      background: #f9fafb;
+      border-color: #d1d5db;
+      color: #374151;
+    }
+
+    .btn-next {
+      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      color: white;
+    }
+
+    .btn-next:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 31, 84, 0.3);
+    }
+
+    .btn-submit {
+      background: linear-gradient(135deg, #059669, #10b981);
+      color: white;
+      min-width: 150px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Step Section Styles */
+    .step-section {
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .header-bar {
+        padding: 1rem;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      
+      .nav-menu {
+        gap: 1rem;
+        order: 3;
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .registration-container {
+        padding: 1rem;
+      }
+      
+      .form-header {
+        padding: 2rem 1.5rem 1.5rem;
+      }
+      
+      .form-title {
+        font-size: 2rem;
+      }
+      
+      .form-content {
+        padding: 0 1.5rem 2rem;
+      }
+      
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      
+      .profile-picture {
+        width: 100px;
+        height: 100px;
+      }
+      
+      .register-button {
+        width: 100%;
+        margin-top: 1.5rem;
+      }
+      
+      .form-section {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+      }
+      
+      .section-title {
+        font-size: 1.25rem;
+      }
+      
+      .validation-summary {
+        grid-template-columns: 1fr;
+      }
+      
+      .checkbox-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+      
+      .terms-label {
+        text-align: left;
+      }
+      
+      .progress-container {
+        padding: 0 1rem;
+        margin: 1.5rem 0;
+      }
+      
+      .step-label {
+        font-size: 0.625rem;
+        max-width: 60px;
+      }
+      
+      .step-number {
+        width: 32px;
+        height: 32px;
+        font-size: 0.75rem;
+      }
+      
+      .step-navigation {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .btn-previous, .btn-next, .btn-submit {
+        width: 100%;
+        min-width: auto;
+      }
+    }
   </style>
 </head>
 <body class="bg-light">
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg bg-navy px-3 shadow-sm">
-  <a class="navbar-brand fw-bold text-golden" href="index.php">National University - Lipa</a>
-  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-    <ul class="navbar-nav">
-      <li class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle text-golden" id="userDropdown" data-bs-toggle="dropdown">
-          <?php echo isset($_SESSION['user']) ? htmlspecialchars($_SESSION['user']['firstname']) : "User"; ?>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-end">
-          <?php if (isset($_SESSION['user'])): ?>
-            <li><a class="dropdown-item">Email: <?php echo htmlspecialchars($_SESSION['user']['email']); ?></a></li>
-            <li><a class="dropdown-item">Program: <?php echo htmlspecialchars($_SESSION['user']['program']); ?></a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item text-danger" href="logout.php">Logout</a></li>
-          <?php else: ?>
-            <li><a class="dropdown-item" href="login.php">Login</a></li>
-          <?php endif; ?>
-        </ul>
-      </li>
-    </ul>
-  </div>
+<!-- Header Bar -->
+<header class="header-bar">
+  <a href="index.php" class="logo">
+    <div class="logo-icon">A</div>
+    <span>AcademicsPro</span>
+  </a>
+  
+  <nav class="nav-menu">
+    <a href="index.php" class="nav-item">
+      <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+      </svg>
+      Home
+    </a>
+    <a href="enrollee.php" class="nav-item">
+      <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+      </svg>
+      Dashboard
+    </a>
+    <a href="admin.php" class="nav-item">
+      <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+      </svg>
+      Students
+    </a>
+    <a href="courses.php" class="nav-item">
+      <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 100 2h.01a1 1 0 100-2H10zm-4 1a1 1 0 011-1h.01a1 1 0 110 2H7a1 1 0 01-1-1zm1-4a1 1 0 100 2h.01a1 1 0 100-2H7zm2 0a1 1 0 100 2h.01a1 1 0 100-2H9zm2 0a1 1 0 100 2h.01a1 1 0 100-2h-.01z"/>
+      </svg>
+      Courses
+    </a>
 </nav>
 
-<!-- Hero Section -->
-<section class="hero py-5">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-lg-10 col-md-12">
-        <div class="card shadow-lg rounded-3 border-0">
-          <div class="progress-container px-4">
-            <div class="progress">
-              <div id="formProgress" class="progress-bar" style="width: 33%;">Step 1 of 3</div>
+  <div class="header-actions">
+    <a href="login.php" class="btn-login">Login</a>
+    <a href="register.php" class="btn-register">Register</a>
             </div>
-          </div>
-          <div class="card-body p-4 form-scroll">
-            <h2 class="text-center text-navy fw-bold mb-4">Registration Form</h2>
+</header>
 
             <!-- Registration Form -->
-            <form id="multiStepForm" action="process_register.php" method="POST" enctype="multipart/form-data">
-              <div class="row justify-content-center">
-                <div class="col-md-8">
+<div class="registration-container">
+  <div class="registration-card">
+    <div class="form-header">
+      <h1 class="form-title">Student Registration</h1>
+      <p class="form-subtitle">Complete the form below to register as a new student.</p>
+      
+      <?php if (isset($_GET['error'])): ?>
+        <div class="alert alert-danger" style="background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+          <?php 
+          switch($_GET['error']) {
+            case 'email_exists':
+              echo 'This email address is already registered. Please use a different email address.';
+              break;
+            case 'registration_failed':
+              echo 'Registration failed. Please try again or contact support if the problem persists.';
+              break;
+            default:
+              echo 'An error occurred during registration. Please try again.';
+          }
+          ?>
+        </div>
+      <?php endif; ?>
+      
+      <!-- Profile Picture Section -->
+      <div class="profile-section">
+        <div class="profile-picture" onclick="document.getElementById('photo').click()">
+          <img id="preview" src="uploads/default.png" alt="Profile Preview" class="profile-preview" style="display: none;">
+          <div class="profile-placeholder" id="placeholder">
+            <svg class="camera-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+            </svg>
+                    </div>
+                    </div>
+        <input type="file" name="photo" id="photo" class="file-input" accept="image/*" onchange="previewImage(event)">
+                    </div>
+                    </div>
 
-                  <!-- STEP 1: Basic Information -->
-                  <div class="step-section active" id="step-1">
-                    <h5 class="section-title">Basic Information</h5>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">First Name</label>
-                      <input type="text" name="firstname" class="form-control border-navy" required>
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">Middle Name</label>
-                      <input type="text" name="middlename" class="form-control border-navy">
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">Last Name</label>
-                      <input type="text" name="lastname" class="form-control border-navy" required>
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">Email Address</label>
-                      <input type="email" name="email" class="form-control border-navy" required>
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">Password</label>
-                      <input type="password" name="password" class="form-control border-navy" required>
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">Mobile Number</label>
-                      <input type="text" name="mobile" class="form-control border-navy" required>
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">Nationality</label>
-                      <input type="text" name="nationality" class="form-control border-navy" required>
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">Sex</label>
-                      <select name="sex" class="form-select border-navy" required>
-                        <option value="">Select</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Prefer not to say">Prefer not to say</option>
-                      </select>
-                    </div>
-                    <div class="d-flex justify-content-end">
-                      <button type="button" class="btn btn-primary" onclick="nextStep(1)">Next</button>
-                    </div>
-                  </div>
+      <!-- Progress Bar -->
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill" style="width: 25%"></div>
+        </div>
+        <div class="progress-steps">
+          <div class="progress-step active" data-step="1">
+            <div class="step-number">1</div>
+            <div class="step-label">Personal Details</div>
+          </div>
+          <div class="progress-step" data-step="2">
+            <div class="step-number">2</div>
+            <div class="step-label">Academic Info</div>
+          </div>
+          <div class="progress-step" data-step="3">
+            <div class="step-number">3</div>
+            <div class="step-label">Other Info</div>
+          </div>
+          <div class="progress-step" data-step="4">
+            <div class="step-number">4</div>
+            <div class="step-label">Review & Submit</div>
+          </div>
+        </div>
+      </div>
+    
+    <div class="form-content">
+      <form id="registrationForm" action="process_register.php" method="POST" enctype="multipart/form-data">
+        
+        <!-- SECTION 1: Personal Details -->
+        <div class="form-section step-section" id="step1" data-step="1">
+          <div class="section-header">
+            <h3 class="section-title">Personal Details</h3>
+            <p class="section-subtitle">Please provide your personal information</p>
+          </div>
+          
+          <!-- Row 1: First Name & Middle Name -->
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">First Name</label>
+              <input type="text" name="firstname" class="form-control" placeholder="Enter your first name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Middle Name</label>
+              <input type="text" name="middlename" class="form-control" placeholder="Enter your middle name">
+            </div>
+          </div>
 
-                  <!-- STEP 2: Academic Information -->
-                  <div class="step-section" id="step-2">
-                    <h5 class="section-title mt-4">Academic Information</h5>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">Academic Year</label>
-                      <input type="text" name="academic_year" class="form-control border-navy" value="2025-2026" required>
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">Academic Term</label>
-                      <select name="academic_term" class="form-select border-navy" required>
-                        <option value="1st Semester">1st Semester</option>
-                        <option value="2nd Semester">2nd Semester</option>
-                        <option value="Summer">Summer</option>
-                      </select>
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">Applying For</label>
-                      <select name="applying_for" class="form-select border-navy" required>
-                        <option value="Freshman">Freshman</option>
-                        <option value="Transferee">Transferee</option>
-                        <option value="Cross Enrollee">Cross Enrollee</option>
-                      </select>
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">Course Strand</label>
-                      <input type="text" name="strand" class="form-control border-navy">
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">Academic Program</label>
-                      <select name="program" class="form-select border-navy" required>
-                        <option value="">-- Select Program --</option>
-                        <option value="BSCS">BSCS</option>
-                        <option value="BSIT">BSIT</option>
-                        <option value="BSCE">BSCE</option>
-                        <option value="BSArch">BSArch</option>
-                        <option value="BSMT">BSMT</option>
-                        <option value="BSN">BSN</option>
-                        <option value="BSPYS">BSPYS</option>
-                        <option value="BSTM">BSTM</option>
-                        <option value="BSA - Marketing">BSA - Marketing</option>
-                        <option value="BSA - Financial Management">BSA - Financial Management</option>
-                      </select>
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">Second Choice of Program</label>
-                      <select name="second_program" class="form-select border-navy" required>
-                        <option value="">-- Select Second Choice Program --</option>
-                        <option value="BSCS">BSCS</option>
-                        <option value="BSIT">BSIT</option>
-                        <option value="BSCE">BSCE</option>
-                        <option value="BSArch">BSArch</option>
-                        <option value="BSMT">BSMT</option>
-                        <option value="BSN">BSN</option>
-                        <option value="BSPYS">BSPYS</option>
-                        <option value="BSTM">BSTM</option>
-                        <option value="BSA - Marketing">BSA - Marketing</option>
-                        <option value="BSA - Financial Management">BSA - Financial Management</option>
-                      </select>
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">Third Choice of Program</label>
-                      <select name="third_program" class="form-select border-navy">
-                        <option value="">-- Select Third Choice Program (Optional) --</option>
-                        <option value="BSCS">BSCS</option>
-                        <option value="BSIT">BSIT</option>
-                        <option value="BSCE">BSCE</option>
-                        <option value="BSArch">BSArch</option>
-                        <option value="BSMT">BSMT</option>
-                        <option value="BSN">BSN</option>
-                        <option value="BSPYS">BSPYS</option>
-                        <option value="BSTM">BSTM</option>
-                        <option value="BSA - Marketing">BSA - Marketing</option>
-                        <option value="BSA - Financial Management">BSA - Financial Management</option>
-                      </select>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                      <button type="button" class="btn btn-secondary" onclick="prevStep(2)">Back</button>
-                      <button type="button" class="btn btn-primary" onclick="nextStep(2)">Next</button>
-                    </div>
-                  </div>
+          <!-- Row 2: Last Name & Email -->
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Last Name</label>
+              <input type="text" name="lastname" class="form-control" placeholder="Enter your last name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+            </div>
+          </div>
 
-                  <!-- STEP 3: Additional Information -->
-                  <div class="step-section" id="step-3">
-                    <h5 class="section-title mt-4">Additional Information</h5>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">Family Annual Income</label>
-                      <input type="text" name="family_income" class="form-control border-navy" required>
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">Father's Occupation</label>
-                      <input type="text" name="father_occupation" class="form-control border-navy">
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">Mother's Occupation</label>
-                      <input type="text" name="mother_occupation" class="form-control border-navy">
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">Birthplace</label>
-                      <input type="text" name="birthplace" class="form-control border-navy">
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">City</label>
-                      <input type="text" name="city" class="form-control border-navy">
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">Province</label>
-                      <input type="text" name="province" class="form-control border-navy">
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label text-navy">Currently Residing At</label>
-                      <input type="text" name="current_address" class="form-control border-navy">
-                    </div>
-                    <div class="mb-3 text-center">
-                      <label class="form-label text-navy">Profile Picture</label>
-                      <div class="mb-2">
-                        <img id="preview" src="uploads/default.png" alt="Preview" class="img-thumbnail" style="max-width:150px; max-height:150px;">
-                      </div>
-                      <input type="file" name="photo" class="form-control border-navy" accept="image/*" onchange="previewImage(event)">
-                    </div>
-                    <div class="d-flex justify-content-between">
-                      <button type="button" class="btn btn-secondary" onclick="prevStep(3)">Back</button>
-                      <button type="submit" class="btn btn-success fw-bold" id="registerBtn">
-                        <span id="btnText">Register & Predict Enrollment</span>
-                        <span id="btnSpinner" class="spinner-border spinner-border-sm ms-2" style="display: none;"></span>
-                      </button>
-                    </div>
-                  </div>
+          <!-- Row 3: Date of Birth & Phone Number -->
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Date of Birth</label>
+              <input type="date" name="birth_date" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <input type="tel" name="mobile" id="mobile" class="form-control" placeholder="09XXXXXXXXX" maxlength="11" pattern="[0-9]{11}" title="Please enter exactly 11 digits" required>
+            </div>
+          </div>
 
-                </div>
-              </div>
+          <!-- Row 4: Sex & Birthplace -->
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Sex</label>
+              <select name="sex" class="form-select" required>
+                <option value="">Select Sex</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Prefer not to say">Prefer not to say</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Birthplace</label>
+              <input type="text" name="birthplace" class="form-control" placeholder="Enter your birthplace" required>
+            </div>
+          </div>
+
+          <!-- Row 5: Province & City/Municipality -->
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Province</label>
+              <select name="province" id="province" class="form-select" required onchange="updateCities()">
+                <option value="">Select Province</option>
+                <?php
+                include 'connections.php';
+                $result = $conn->query("SELECT id, province_name FROM provinces ORDER BY province_name");
+                while ($row = $result->fetch_assoc()) {
+                    echo "<option value='{$row['id']}'>{$row['province_name']}</option>";
+                }
+                ?>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">City/Municipality</label>
+              <select name="city" id="city" class="form-select" required onchange="updateBarangays()" disabled>
+                <option value="">Select City/Municipality</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Row 6: Barangay (Full Width) -->
+          <div class="form-grid full-width">
+            <div class="form-group">
+              <label class="form-label">Barangay</label>
+              <select name="barangay" id="barangay" class="form-select" required disabled>
+                <option value="">Select Barangay</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- Navigation Buttons -->
+          <div class="step-navigation">
+            <button type="button" class="btn-next" onclick="nextStep()">Next Step</button>
+          </div>
+        </div>
+
+        <!-- SECTION 2: Academic Information -->
+        <div class="form-section step-section" id="step2" data-step="2" style="display: none;">
+          <div class="section-header">
+            <h3 class="section-title">Academic Information</h3>
+            <p class="section-subtitle">Please provide your academic details</p>
+          </div>
+          
+          <!-- Row 1: Applying For & Academic Year -->
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Applying For</label>
+              <select name="applying_for" class="form-select" required>
+                <option value="">Select Status</option>
+                <option value="Freshman">Freshman</option>
+                <option value="Transferee">Transferee</option>
+                <option value="Cross Enrollee">Cross Enrollee</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Academic Year</label>
+              <input type="text" name="academic_year" class="form-control" value="2025-2026" readonly>
+            </div>
+          </div>
+
+          <!-- Row 2: Academic Term & First Choice Program -->
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Academic Term</label>
+              <select name="academic_term" class="form-select" required>
+                <option value="">Select Term</option>
+                <option value="1st Term">1st Term</option>
+                <option value="2nd Term">2nd Term</option>
+                <option value="3rd Term">3rd Term</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">First Choice Program</label>
+              <select name="program" class="form-select" required>
+                <option value="">Select Program</option>
+                <option value="BSCS">BSCS</option>
+                <option value="BSIT">BSIT</option>
+                <option value="BSCE">BSCE</option>
+                <option value="BSArch">BSArch</option>
+                <option value="BSMT">BSMT</option>
+                <option value="BSN">BSN</option>
+                <option value="BSPsy">BSPsy</option>
+                <option value="BSTM">BSTM</option>
+                <option value="BSA">BSA</option>
+                <option value="BSBA - MM">BSBA - MM</option>
+                <option value="BSBA - Fin">BSBA - Fin</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Row 3: Strand & Second Choice Program -->
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Previous Strand/Track</label>
+              <select name="strand" class="form-select" required>
+                <option value="">Select Strand/Track</option>
+                <option value="STEM">STEM</option>
+                <option value="HUMSS">HUMSS</option>
+                <option value="GAS">GAS</option>
+                <option value="ALS">ALS</option>
+                <option value="Non-K12 Curriculum">Non-K12 Curriculum</option>
+                <option value="TVL-Industrial">TVL-Industrial</option>
+                <option value="TVL-AFA">TVL-AFA</option>
+                <option value="TVL-EIM">TVL-EIM</option>
+                <option value="TVL-EPAS">TVL-EPAS</option>
+                <option value="TVL-SSP">TVL-SSP</option>
+                <option value="TVL-SMAW">TVL-SMAW</option>
+                <option value="ARTDES">ARTDES</option>
+                <option value="TVL-ICT">TVL-ICT</option>
+                <option value="TVL-HE">TVL-HE</option>
+                <option value="ABM">ABM</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Second Choice Program</label>
+              <select name="second_program" class="form-select">
+                <option value="">Select Second Choice (Optional)</option>
+                <option value="BSCS">BSCS</option>
+                <option value="BSIT">BSIT</option>
+                <option value="BSCE">BSCE</option>
+                <option value="BSArch">BSArch</option>
+                <option value="BSMT">BSMT</option>
+                <option value="BSN">BSN</option>
+                <option value="BSPsy">BSPsy</option>
+                <option value="BSTM">BSTM</option>
+                <option value="BSA">BSA</option>
+                <option value="BSBA - MM">BSBA - MM</option>
+                <option value="BSBA - Fin">BSBA - Fin</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Row 4: Previous School & School Type -->
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Previous School Attended</label>
+              <input type="text" name="previous_school" class="form-control" placeholder="Enter previous school name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">School Type</label>
+              <select name="school_type" class="form-select" required>
+                <option value="">Select School Type</option>
+                <option value="Public">Public</option>
+                <option value="Private">Private</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- Navigation Buttons -->
+          <div class="step-navigation">
+            <button type="button" class="btn-previous" onclick="previousStep()">Previous</button>
+            <button type="button" class="btn-next" onclick="nextStep()">Next Step</button>
+          </div>
+        </div>
+
+        <!-- SECTION 3: Other Information -->
+        <div class="form-section step-section" id="step3" data-step="3" style="display: none;">
+          <div class="section-header">
+            <h3 class="section-title">Other Information</h3>
+            <p class="section-subtitle">Please provide additional information</p>
+          </div>
+          
+          <!-- Row 1: Annual Family Income & Parent 1 Occupation -->
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Annual Family Income</label>
+              <input type="text" name="family_income" class="form-control" placeholder="e.g., 50000" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Parent 1 Occupation</label>
+              <input type="text" name="father_occupation" class="form-control" placeholder="Enter occupation">
+            </div>
+          </div>
+
+          <!-- Row 2: Parent 2 Occupation (Full Width) -->
+          <div class="form-grid full-width">
+            <div class="form-group">
+              <label class="form-label">Parent 2 Occupation</label>
+              <input type="text" name="mother_occupation" class="form-control" placeholder="Enter occupation (or N/A)">
+            </div>
+          </div>
+          
+          <!-- Navigation Buttons -->
+          <div class="step-navigation">
+            <button type="button" class="btn-previous" onclick="previousStep()">Previous</button>
+            <button type="button" class="btn-next" onclick="nextStep()">Next Step</button>
+          </div>
+        </div>
+
+        <!-- STEP 4: VALIDATION & TERMS -->
+        <div class="form-section step-section validation-section" id="step4" data-step="4" style="display: none;">
+          <div class="section-header">
+            <h3 class="section-title">Review Your Information</h3>
+            <p class="section-subtitle">Please review all the information you have provided</p>
+          </div>
+          
+          <div class="validation-summary" id="validationSummary">
+            <!-- Validation items will be populated by JavaScript -->
+          </div>
+
+          <!-- Terms Agreement -->
+          <div class="terms-agreement">
+            <div class="checkbox-group">
+              <input type="checkbox" id="termsAgreement" name="terms_agreement" required>
+              <label for="termsAgreement" class="terms-label">
+                I agree to the <a href="#" class="terms-link">Terms and Conditions</a> and <a href="#" class="terms-link">Privacy Policy</a> of AcademicsPro
+              </label>
+            </div>
+            <div class="terms-error" id="termsError" style="display: none;">
+              You must agree to the terms and conditions to proceed with registration.
+            </div>
+          </div>
+          
+          <!-- Navigation Buttons -->
+          <div class="step-navigation">
+            <button type="button" class="btn-previous" onclick="previousStep()">Previous</button>
+            <button type="submit" class="btn-submit" id="registerBtn">
+              <span id="btnText">Register</span>
+              <span id="btnSpinner" class="spinner-border spinner-border-sm ms-2" style="display: none;"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Hidden fields for compatibility -->
+        <input type="hidden" name="password" value="default123">
+        <input type="hidden" name="nationality" value="Filipino">
+        <input type="hidden" name="current_address" value="">
             </form>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
 
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  let currentStep = 1;
-
-  function updateProgress(step) {
-    const progress = document.getElementById("formProgress");
-    const percent = (step / 3) * 100;
-    progress.style.width = percent + "%";
-    progress.textContent = "Step " + step + " of 3";
+  function previewImage(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const preview = document.getElementById('preview');
+        const placeholder = document.getElementById('placeholder');
+        
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+        placeholder.style.display = 'none';
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
-  function toggleRequired(step, enable) {
-    const inputs = document.querySelectorAll("#step-" + step + " input, #step-" + step + " select, #step-" + step + " textarea");
-    inputs.forEach(input => {
-      if (enable) {
-        if (input.dataset.originalRequired === "true") input.setAttribute("required", "required");
-      } else {
-        if (input.hasAttribute("required")) {
-          input.dataset.originalRequired = "true";
-          input.removeAttribute("required");
+  function toggleDropdown() {
+    const dropdown = document.querySelector('.dropdown-menu');
+    dropdown.classList.toggle('show');
+  }
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(event) {
+    const dropdown = document.querySelector('.dropdown-menu');
+    const userProfile = document.querySelector('.user-profile');
+    
+    if (!userProfile.contains(event.target)) {
+      dropdown.classList.remove('show');
+    }
+  });
+
+  // Database-driven location management (no PSA API needed)
+
+  // Update cities based on selected province using database
+  function updateCities() {
+    console.log('updateCities function called');
+    
+    const provinceSelect = document.getElementById('province');
+    const citySelect = document.getElementById('city');
+    const barangaySelect = document.getElementById('barangay');
+    
+    console.log('Elements found:', {
+      province: provinceSelect,
+      city: citySelect,
+      barangay: barangaySelect
+    });
+    
+    // Clear city and barangay options
+    citySelect.innerHTML = '<option value="">Loading cities...</option>';
+    barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+    
+    // Reset disabled states
+    citySelect.disabled = true;
+    barangaySelect.disabled = true;
+    
+    const selectedProvinceId = provinceSelect.value;
+    console.log('Selected province ID:', selectedProvinceId);
+    
+    if (!selectedProvinceId) {
+      citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
+      return;
+    }
+    
+    // Use XMLHttpRequest for better compatibility
+    const xhr = new XMLHttpRequest();
+    const url = `./get_cities.php?province_id=${selectedProvinceId}`;
+    console.log('Making request to:', url);
+    
+    xhr.open('GET', url, true);
+    xhr.onreadystatechange = function() {
+      console.log('XHR readyState:', xhr.readyState, 'status:', xhr.status);
+      
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          console.log('Response received:', xhr.responseText);
+          
+          try {
+            const cities = JSON.parse(xhr.responseText);
+            console.log('Parsed cities:', cities);
+            
+            citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
+            
+            cities.forEach(city => {
+              const option = document.createElement('option');
+              option.value = city.id;
+              option.textContent = city.city_name;
+              citySelect.appendChild(option);
+              console.log('Added city:', city.city_name, 'ID:', city.id);
+            });
+            
+            citySelect.disabled = false;
+            console.log('Cities loaded successfully');
+          } catch (error) {
+            console.error('Error parsing cities:', error);
+            citySelect.innerHTML = '<option value="">Error loading cities</option>';
+          }
+        } else {
+          console.error('HTTP error:', xhr.status);
+          citySelect.innerHTML = '<option value="">Error loading cities</option>';
         }
       }
+    };
+    
+    xhr.onerror = function() {
+      console.error('XHR error occurred');
+      citySelect.innerHTML = '<option value="">Network error</option>';
+    };
+    
+    console.log('Sending XHR request...');
+    xhr.send();
+  }
+
+
+  // Update barangays based on selected city using database
+  function updateBarangays() {
+    const citySelect = document.getElementById('city');
+    const barangaySelect = document.getElementById('barangay');
+    
+    // Clear barangay options
+    barangaySelect.innerHTML = '<option value="">Loading barangays...</option>';
+    
+    const selectedCityId = citySelect.value;
+    
+    if (!selectedCityId) {
+      barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+      barangaySelect.disabled = true;
+      return;
+    }
+    
+    // Use XMLHttpRequest for better compatibility
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `./get_barangays.php?city_id=${selectedCityId}`, true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          try {
+            const barangays = JSON.parse(xhr.responseText);
+            barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+            
+            barangays.forEach(barangay => {
+              const option = document.createElement('option');
+              option.value = barangay.id;
+              option.textContent = barangay.barangay_name;
+              barangaySelect.appendChild(option);
+            });
+            
+            barangaySelect.disabled = false;
+          } catch (error) {
+            console.error('Error parsing barangays:', error);
+            barangaySelect.innerHTML = '<option value="">Error loading barangays</option>';
+          }
+        } else {
+          console.error('HTTP error:', xhr.status);
+          barangaySelect.innerHTML = '<option value="">Error loading barangays</option>';
+        }
+      }
+    };
+    xhr.send();
+  }
+
+
+  // Phone number validation
+  function validatePhoneNumber() {
+    const phoneInput = document.getElementById('mobile');
+    
+    phoneInput.addEventListener('input', function(e) {
+      // Remove any non-digit characters
+      let value = e.target.value.replace(/[^0-9]/g, '');
+      
+      // Limit to 11 digits
+      if (value.length > 11) {
+        value = value.substring(0, 11);
+      }
+      
+      e.target.value = value;
+      
+      // Add visual feedback for validation
+      if (value.length === 11) {
+        e.target.style.borderColor = '#10b981'; // Green for valid
+      } else if (value.length > 0) {
+        e.target.style.borderColor = '#f59e0b'; // Orange for incomplete
+      } else {
+        e.target.style.borderColor = '#e5e7eb'; // Default
+      }
+    });
+    
+    phoneInput.addEventListener('keypress', function(e) {
+      // Allow only digits
+      if (!/[0-9]/.test(e.key) && !['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'Home', 'End', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+        e.preventDefault();
+      }
+    });
+    
+    phoneInput.addEventListener('paste', function(e) {
+      // Handle paste events to filter out non-digits
+      setTimeout(() => {
+        let value = e.target.value.replace(/[^0-9]/g, '');
+        if (value.length > 11) {
+          value = value.substring(0, 11);
+        }
+        e.target.value = value;
+      }, 0);
     });
   }
 
-  function nextStep(step) {
-    const currentSection = document.getElementById("step-" + step);
-    const inputs = currentSection.querySelectorAll("input, select, textarea");
+  // Step management variables
+  let currentStep = 1;
+  const totalSteps = 4;
 
-    // Validate required fields in current section
-    for (let input of inputs) {
-      if (input.hasAttribute("required") && !input.value) {
-        alert("Please fill out all required fields before proceeding.");
-        input.focus();
+  // Form validation and submission handler
+  window.onload = () => {
+    // Initialize phone number validation
+    validatePhoneNumber();
+    
+    // Initialize form validation
+    initializeFormValidation();
+    
+    // Initialize step management
+    initializeStepManagement();
+    
+    // Form submission handler
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Check terms agreement
+      const termsCheckbox = document.getElementById('termsAgreement');
+      const termsError = document.getElementById('termsError');
+      
+      if (!termsCheckbox.checked) {
+        termsError.style.display = 'block';
+        termsCheckbox.focus();
+        return;
+      } else {
+        termsError.style.display = 'none';
+      }
+      
+      // Validate all sections
+      const validationResult = validateAllSections();
+      if (!validationResult.isValid) {
+        alert('Please complete all required fields before submitting.');
         return;
       }
-    }
-
-    // Hide current, show next
-    toggleRequired(step, false);
-    document.getElementById("step-" + step).classList.remove("active");
-    document.getElementById("step-" + (step + 1)).classList.add("active");
-    toggleRequired(step + 1, true);
-
-    currentStep = step + 1;
-    updateProgress(currentStep);
-  }
-
-  function prevStep(step) {
-    toggleRequired(step, false);
-    document.getElementById("step-" + step).classList.remove("active");
-    document.getElementById("step-" + (step - 1)).classList.add("active");
-    toggleRequired(step - 1, true);
-
-    currentStep = step - 1;
-    updateProgress(currentStep);
-  }
-
-  function previewImage(event) {
-    const reader = new FileReader();
-    reader.onload = function() {
-      document.getElementById('preview').src = reader.result;
-    }
-    reader.readAsDataURL(event.target.files[0]);
-  }
-
-  // Init: only step 1 required
-  window.onload = () => {
-    toggleRequired(1, true);
-    toggleRequired(2, false);
-    toggleRequired(3, false);
-    
-    // Add form submit handler
-    document.getElementById('multiStepForm').addEventListener('submit', function(e) {
+      
+      // Validate phone number before submission
+      const phoneInput = document.getElementById('mobile');
+      if (phoneInput.value.length !== 11) {
+        alert('Please enter a valid 11-digit phone number');
+        phoneInput.focus();
+        return;
+      }
+      
+      // Show loading state and submit
       const registerBtn = document.getElementById('registerBtn');
       const btnText = document.getElementById('btnText');
       const btnSpinner = document.getElementById('btnSpinner');
       
-      // Show loading state
       registerBtn.disabled = true;
-      btnText.textContent = 'Processing & Predicting...';
+      btnText.textContent = 'Processing...';
       btnSpinner.style.display = 'inline-block';
+      
+      // Submit the form
+      this.submit();
     });
+  }
+
+  // Initialize form validation
+  function initializeFormValidation() {
+    // Add event listeners to form fields for real-time validation
+    const formFields = document.querySelectorAll('#registrationForm input, #registrationForm select');
+    
+    formFields.forEach(field => {
+      field.addEventListener('blur', updateValidationSummary);
+      field.addEventListener('change', updateValidationSummary);
+      field.addEventListener('input', updateValidationSummary);
+    });
+    
+    // Initial validation update
+    updateValidationSummary();
+  }
+
+  // Update validation summary
+  function updateValidationSummary() {
+    const validationSummary = document.getElementById('validationSummary');
+    const sections = [
+      {
+        title: 'Personal Details',
+        fields: ['firstname', 'lastname', 'email', 'birth_date', 'mobile', 'sex', 'birthplace', 'province', 'city', 'barangay'],
+        icon: '👤'
+      },
+      {
+        title: 'Academic Information',
+        fields: ['applying_for', 'academic_term', 'program', 'strand', 'previous_school', 'school_type'],
+        icon: '🎓'
+      },
+      {
+        title: 'Other Information',
+        fields: ['family_income'],
+        icon: '📋'
+      }
+    ];
+
+    let validationHTML = '';
+    
+    sections.forEach(section => {
+      const isComplete = section.fields.every(fieldName => {
+        const field = document.querySelector(`[name="${fieldName}"]`);
+        if (!field) return true;
+        
+        if (field.type === 'checkbox') {
+          return field.checked;
+        }
+        
+        return field.value.trim() !== '';
+      });
+      
+      const status = isComplete ? 'complete' : 'incomplete';
+      const statusIcon = isComplete ? '✅' : '⚠️';
+      
+      validationHTML += `
+        <div class="validation-item ${status}">
+          <h4>
+            <span class="icon">${section.icon}</span>
+            ${section.title}
+          </h4>
+          <p>${isComplete ? 'All required fields completed' : 'Some required fields are missing'}</p>
+        </div>
+      `;
+    });
+    
+    validationSummary.innerHTML = validationHTML;
+  }
+
+  // Validate all sections
+  function validateAllSections() {
+    const requiredFields = [
+      'firstname', 'lastname', 'email', 'birth_date', 'mobile', 'sex', 'birthplace',
+      'province', 'city', 'barangay', 'applying_for', 'academic_term', 'program',
+      'strand', 'previous_school', 'school_type', 'family_income'
+    ];
+    
+    const missingFields = [];
+    
+    requiredFields.forEach(fieldName => {
+      const field = document.querySelector(`[name="${fieldName}"]`);
+      if (field && field.value.trim() === '') {
+        missingFields.push(fieldName);
+      }
+    });
+    
+    return {
+      isValid: missingFields.length === 0,
+      missingFields: missingFields
+    };
+  }
+
+  // Step Management Functions
+  function initializeStepManagement() {
+    updateProgressBar();
+    updateStepVisibility();
+  }
+
+  function nextStep() {
+    if (validateCurrentStep()) {
+      if (currentStep < totalSteps) {
+        currentStep++;
+        updateProgressBar();
+        updateStepVisibility();
+        updateStepStatus();
+        updateValidationSummary();
+        
+        // Scroll to top of form
+        document.querySelector('.form-content').scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+      }
+    }
+  }
+
+  function previousStep() {
+    if (currentStep > 1) {
+      currentStep--;
+      updateProgressBar();
+      updateStepVisibility();
+      updateStepStatus();
+      
+      // Scroll to top of form
+      document.querySelector('.form-content').scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start' 
+      });
+    }
+  }
+
+  function updateProgressBar() {
+    const progressFill = document.getElementById('progressFill');
+    const progressPercent = (currentStep / totalSteps) * 100;
+    progressFill.style.width = `${progressPercent}%`;
+  }
+
+  function updateStepVisibility() {
+    // Hide all steps
+    document.querySelectorAll('.step-section').forEach(step => {
+      step.style.display = 'none';
+    });
+    
+    // Show current step
+    const currentStepElement = document.getElementById(`step${currentStep}`);
+    if (currentStepElement) {
+      currentStepElement.style.display = 'block';
+    }
+  }
+
+  function updateStepStatus() {
+    // Update progress step indicators
+    document.querySelectorAll('.progress-step').forEach((step, index) => {
+      const stepNumber = index + 1;
+      step.classList.remove('active', 'completed');
+      
+      if (stepNumber < currentStep) {
+        step.classList.add('completed');
+      } else if (stepNumber === currentStep) {
+        step.classList.add('active');
+      }
+    });
+  }
+
+  function validateCurrentStep() {
+    const stepFields = {
+      1: ['firstname', 'lastname', 'email', 'birth_date', 'mobile', 'sex', 'birthplace', 'province', 'city', 'barangay'],
+      2: ['applying_for', 'academic_term', 'program', 'strand', 'previous_school', 'school_type'],
+      3: ['family_income']
+    };
+    
+    const currentStepFields = stepFields[currentStep] || [];
+    const missingFields = [];
+    
+    currentStepFields.forEach(fieldName => {
+      const field = document.querySelector(`[name="${fieldName}"]`);
+      if (field && field.value.trim() === '') {
+        missingFields.push(fieldName);
+      }
+    });
+    
+    if (missingFields.length > 0) {
+      alert(`Please complete all required fields in this step before proceeding.`);
+      
+      // Focus on first missing field
+      const firstMissingField = document.querySelector(`[name="${missingFields[0]}"]`);
+      if (firstMissingField) {
+        firstMissingField.focus();
+      }
+      
+      return false;
+    }
+    
+    return true;
   }
 </script>
 </body>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test AJAX</title>
+</head>
+<body>
+    <h1>Test AJAX Call</h1>
+    <button onclick="testCities()">Test Cities API</button>
+    <div id="result"></div>
+
+    <script>
+    async function testCities() {
+        const resultDiv = document.getElementById('result');
+        
+        try {
+            resultDiv.innerHTML = 'Loading...';
+            
+            const response = await fetch('frontend/get_cities.php?province_id=7');
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const cities = await response.json();
+            
+            let html = '<h3>Cities:</h3><ul>';
+            cities.forEach(city => {
+                html += `<li>ID: ${city.id}, Name: ${city.city_name}</li>`;
+            });
+            html += '</ul>';
+            
+            resultDiv.innerHTML = html;
+            
+        } catch (error) {
+            console.error('Error:', error);
+            resultDiv.innerHTML = 'Error: ' + error.message;
+        }
+    }
+    </script>
+</body>
+</html>

@@ -6,7 +6,7 @@ include 'connections.php';
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Register - AcademicsPro</title>
+  <title>Register - NU Lipa</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
@@ -46,7 +46,7 @@ include 'connections.php';
     .logo-icon {
       width: 40px;
       height: 40px;
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -75,7 +75,7 @@ include 'connections.php';
     }
     
     .nav-item.active {
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       color: white;
     }
     
@@ -103,7 +103,7 @@ include 'connections.php';
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -116,7 +116,7 @@ include 'connections.php';
     
     .user-profile:hover {
       transform: scale(1.05);
-      box-shadow: 0 4px 8px rgba(0, 31, 84, 0.3);
+      box-shadow: 0 4px 8px rgba(41, 56, 85, 0.3);
     }
     
     .dropdown-menu {
@@ -173,7 +173,7 @@ include 'connections.php';
     }
     
     .btn-login {
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       color: white;
       border: none;
       padding: 0.75rem 1.5rem;
@@ -185,14 +185,14 @@ include 'connections.php';
     
     .btn-login:hover {
       transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(0, 31, 84, 0.3);
+      box-shadow: 0 4px 8px rgba(41, 56, 85, 0.3);
       color: white;
     }
     
     .btn-register {
       background: white;
-      color: #001f54;
-      border: 2px solid #001f54;
+      color: #293855;
+      border: 2px solid #293855;
       padding: 0.75rem 1.5rem;
       border-radius: 8px;
       font-weight: 600;
@@ -201,7 +201,7 @@ include 'connections.php';
     }
     
     .btn-register:hover {
-      background: #001f54;
+      background: #293855;
       color: white;
       transform: translateY(-1px);
     }
@@ -250,7 +250,7 @@ include 'connections.php';
     .profile-picture {
       width: 120px;
       height: 120px;
-      border: 3px solid #ffcc00;
+      border: 3px solid #F1AC20;
       border-radius: 50%;
       background: #f9fafb;
       display: flex;
@@ -263,7 +263,7 @@ include 'connections.php';
     }
     
     .profile-picture:hover {
-      border-color: #001f54;
+      border-color: #293855;
       transform: scale(1.05);
     }
     
@@ -281,7 +281,7 @@ include 'connections.php';
     .camera-icon {
       width: 24px;
       height: 24px;
-      color: #001f54;
+      color: #293855;
       position: absolute;
       bottom: -8px;
       right: -8px;
@@ -336,8 +336,8 @@ include 'connections.php';
     }
     
     .form-control:focus, .form-select:focus {
-      border-color: #001f54;
-      box-shadow: 0 0 0 3px rgba(0, 31, 84, 0.1);
+      border-color: #293855;
+      box-shadow: 0 0 0 3px rgba(41, 56, 85, 0.1);
       outline: none;
       background: #ffffff;
     }
@@ -368,7 +368,7 @@ include 'connections.php';
 
     /* Register Button */
     .register-button {
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       color: white;
       border: none;
       border-radius: 8px;
@@ -384,7 +384,7 @@ include 'connections.php';
     
     .register-button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0, 31, 84, 0.3);
+      box-shadow: 0 8px 25px rgba(41, 56, 85, 0.3);
     }
     
     .register-button:disabled {
@@ -516,7 +516,7 @@ include 'connections.php';
       width: 20px;
       height: 20px;
       margin-top: 0.125rem;
-      accent-color: #001f54;
+      accent-color: #293855;
     }
 
     .terms-label {
@@ -528,7 +528,7 @@ include 'connections.php';
     }
 
     .terms-link {
-      color: #001f54;
+      color: #293855;
       text-decoration: none;
       font-weight: 600;
     }
@@ -578,7 +578,7 @@ include 'connections.php';
 
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, #001f54, #1d4ed8);
+      background: linear-gradient(90deg, #293855, #4165D5);
       border-radius: 3px;
       transition: width 0.5s ease;
       position: relative;
@@ -626,7 +626,7 @@ include 'connections.php';
     }
 
     .progress-step.completed:not(:last-child)::after {
-      background: #001f54;
+      background: #293855;
     }
 
     .step-number {
@@ -647,9 +647,9 @@ include 'connections.php';
     }
 
     .progress-step.active .step-number {
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       color: white;
-      box-shadow: 0 4px 8px rgba(0, 31, 84, 0.3);
+      box-shadow: 0 4px 8px rgba(41, 56, 85, 0.3);
       transform: scale(1.1);
     }
 
@@ -668,7 +668,7 @@ include 'connections.php';
     }
 
     .progress-step.active .step-label {
-      color: #001f54;
+      color: #293855;
     }
 
     .progress-step.completed .step-label {
@@ -709,13 +709,13 @@ include 'connections.php';
     }
 
     .btn-next {
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       color: white;
     }
 
     .btn-next:hover {
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 31, 84, 0.3);
+      box-shadow: 0 4px 12px rgba(41, 56, 85, 0.3);
     }
 
     .btn-submit {
@@ -847,8 +847,7 @@ include 'connections.php';
 <!-- Header Bar -->
 <header class="header-bar">
   <a href="index.php" class="logo">
-    <div class="logo-icon">A</div>
-    <span>AcademicsPro</span>
+    <img src="images/National University Lipa.png" alt="NU Lipa" class="logo-image" style="width: 130px; height: 50px;">
   </a>
   
 
@@ -1206,7 +1205,7 @@ include 'connections.php';
             <div class="checkbox-group">
               <input type="checkbox" id="termsAgreement" name="terms_agreement" required>
               <label for="termsAgreement" class="terms-label">
-                I agree to the <a href="#" class="terms-link">Terms and Conditions</a> and <a href="#" class="terms-link">Privacy Policy</a> of AcademicsPro
+                I agree to the <a href="#" class="terms-link">Terms and Conditions</a> and <a href="#" class="terms-link">Privacy Policy</a> of NU Lipa
               </label>
             </div>
             <div class="terms-error" id="termsError" style="display: none;">

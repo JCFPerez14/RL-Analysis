@@ -30,7 +30,7 @@ $stmt->close();
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Course Details - AcademicsPro</title>
+    <title>Course Details - NU Lipa</title>
     <link rel="stylesheet" href="style.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
@@ -70,7 +70,7 @@ $stmt->close();
       .logo-icon {
         width: 40px;
         height: 40px;
-        background: linear-gradient(135deg, #001f54, #1d4ed8);
+        background: linear-gradient(135deg, #293855, #4165D5);
         border-radius: 8px;
         display: flex;
         align-items: center;
@@ -99,7 +99,7 @@ $stmt->close();
       }
       
       .nav-item.active {
-        background: linear-gradient(135deg, #001f54, #1d4ed8);
+        background: linear-gradient(135deg, #293855, #4165D5);
         color: white;
       }
       
@@ -127,7 +127,7 @@ $stmt->close();
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #001f54, #1d4ed8);
+        background: linear-gradient(135deg, #293855, #4165D5);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -217,18 +217,18 @@ $stmt->close();
       }
       
       .breadcrumb-item a {
-        color: #001f54;
+        color: #293855;
         text-decoration: none;
         font-weight: 500;
       }
       
       .breadcrumb-item.active {
-        color: #ffcc00;
+        color: #F1AC20;
         font-weight: 600;
       }
       
       .course-header {
-        background: linear-gradient(135deg, #001f54, #1d4ed8);
+        background: linear-gradient(135deg, #293855, #4165D5);
         color: white;
         padding: 2rem;
         border-radius: 12px;
@@ -303,7 +303,7 @@ $stmt->close();
       }
       
       .back-button {
-        background: linear-gradient(135deg, #001f54, #1d4ed8);
+        background: linear-gradient(135deg, #293855, #4165D5);
         color: white;
         border: none;
         padding: 0.75rem 1.5rem;
@@ -369,8 +369,7 @@ $stmt->close();
 <!-- Header Bar -->
 <header class="header-bar">
   <a href="index.php" class="logo">
-    <div class="logo-icon">A</div>
-    <span>AcademicsPro</span>
+    <img src="images/National University Lipa.png" alt="NU Lipa" class="logo-image" style="width: 130px; height: 50px;">
   </a>
   
   <nav class="nav-menu">

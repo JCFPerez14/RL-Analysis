@@ -28,7 +28,7 @@ if (isset($_GET['success'])) {
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Login - AcademicsPro</title>
+  <title>Login - NU Lipa</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
@@ -71,7 +71,7 @@ if (isset($_GET['success'])) {
     .logo-icon {
       width: 40px;
       height: 40px;
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -100,7 +100,7 @@ if (isset($_GET['success'])) {
     }
     
     .nav-item.active {
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       color: white;
     }
     
@@ -121,7 +121,7 @@ if (isset($_GET['success'])) {
     }
     
     .btn-login {
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       color: white;
       border: none;
       padding: 0.75rem 1.5rem;
@@ -133,14 +133,14 @@ if (isset($_GET['success'])) {
     
     .btn-login:hover {
       transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(0, 31, 84, 0.3);
+      box-shadow: 0 4px 8px rgba(41, 56, 85, 0.3);
       color: white;
     }
     
     .btn-register {
       background: white;
-      color: #001f54;
-      border: 2px solid #001f54;
+      color: #293855;
+      border: 2px solid #293855;
       padding: 0.75rem 1.5rem;
       border-radius: 8px;
       font-weight: 600;
@@ -149,7 +149,7 @@ if (isset($_GET['success'])) {
     }
     
     .btn-register:hover {
-      background: #001f54;
+      background: #293855;
       color: white;
       transform: translateY(-1px);
     }
@@ -220,8 +220,8 @@ if (isset($_GET['success'])) {
     }
     
     .form-control:focus {
-      border-color: #001f54;
-      box-shadow: 0 0 0 3px rgba(0, 31, 84, 0.1);
+      border-color: #293855;
+      box-shadow: 0 0 0 3px rgba(41, 56, 85, 0.1);
       outline: none;
     }
     
@@ -250,7 +250,7 @@ if (isset($_GET['success'])) {
     .remember-me input[type="checkbox"] {
       width: 16px;
       height: 16px;
-      accent-color: #001f54;
+      accent-color: #293855;
     }
     
     .remember-me label {
@@ -260,7 +260,7 @@ if (isset($_GET['success'])) {
     }
     
     .forgot-password {
-      color: #001f54;
+      color: #293855;
       text-decoration: none;
       font-size: 0.875rem;
       font-weight: 500;
@@ -268,12 +268,12 @@ if (isset($_GET['success'])) {
     }
     
     .forgot-password:hover {
-      color: #1d4ed8;
+      color: #4165D5;
     }
 
     /* Login Button */
     .login-button {
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       color: white;
       border: none;
       border-radius: 8px;
@@ -288,7 +288,7 @@ if (isset($_GET['success'])) {
     
     .login-button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0, 31, 84, 0.3);
+      box-shadow: 0 8px 25px rgba(41, 56, 85, 0.3);
     }
     
     .login-button:disabled {
@@ -305,14 +305,14 @@ if (isset($_GET['success'])) {
     }
     
     .register-link a {
-      color: #001f54;
+      color: #293855;
       text-decoration: none;
       font-weight: 600;
       transition: color 0.2s ease;
     }
     
     .register-link a:hover {
-      color: #1d4ed8;
+      color: #4165D5;
     }
 
     /* Alert Styles */
@@ -363,8 +363,7 @@ if (isset($_GET['success'])) {
 <!-- Header Bar -->
 <header class="header-bar">
   <a href="index.php" class="logo">
-    <div class="logo-icon">A</div>
-    <span>AcademicsPro</span>
+    <img src="images/National University Lipa.png" alt="NU Lipa" class="logo-image" style="width: 130px; height: 50px;">
   </a>
   
   

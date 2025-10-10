@@ -11,60 +11,60 @@ body {
 =========================== */
 .navy-bg,
 .bg-navy {
-  background-color: #001f3f !important; /* Deep Navy Blue */
+  background-color: #293855 !important; /* Dark Blue */
 }
 
 .text-navy {
-  color: #001f3f !important;
+  color: #293855 !important;
 }
 
 .text-golden {
-  color: #FFD700 !important; /* Golden Yellow */
+  color: #F1AC20 !important; /* Golden Yellow */
 }
 
 .border-navy {
-  border-color: #001f3f !important;
+  border-color: #293855 !important;
 }
 
 /* ===========================
    BUTTONS
 =========================== */
 .btn-primary {
-  background-color: #001f3f;
+  background-color: #293855;
   border: none;
-  color: #FFD700;
+  color: #F1AC20;
 }
 
 .btn-primary:hover {
-  background-color: #003366;
+  background-color: #4165D5;
 }
 
 .btn-warning {
-  background-color: #ffcc00;
+  background-color: #F1AC20;
   border: none;
-  color: #001f3f;
+  color: #293855;
 }
 
 .btn-warning:hover {
   background-color: #e6b800;
-  color: #001f3f;
+  color: #293855;
 }
 
 .btn-navy {
-  background-color: #001f3f;
-  border-color: #001f3f;
-  color: #FFD700;
+  background-color: #293855;
+  border-color: #293855;
+  color: #F1AC20;
 }
 
 .btn-navy:hover {
-  background-color: #003366;
-  border-color: #003366;
-  color: #FFD700;
+  background-color: #4165D5;
+  border-color: #4165D5;
+  color: #F1AC20;
 }
 
 .btn-light {
   background-color: white;
-  color: #0d3b66;
+  color: #293855;
 }
 
 /* ===========================
@@ -82,7 +82,7 @@ body {
 }
 
 .hero-overlay {
-  background-color: rgba(0, 31, 63, 0.7); /* Navy overlay */
+  background-color: rgba(41, 56, 85, 0.7); /* Dark Blue overlay */
   padding: 40px;
   border-radius: 15px;
   color: #fff;
@@ -94,7 +94,7 @@ body {
 =========================== */
 .services-box {
   background: #fff;
-  border: 2px solid #0d6efd; /* Blue border */
+  border: 2px solid #4165D5; /* Royal Blue border */
 }
 
 .service-box {
@@ -123,14 +123,14 @@ body {
 }
 
 .form-label {
-  color: #001f3f;
+  color: #293855;
   font-weight: 500;
 }
 
 #togglePassword {
   border: none;
   background: #e9ecef;
-  color: #001f3f;
+  color: #293855;
   font-weight: 500;
 }
 
@@ -142,16 +142,16 @@ body {
 }
 
 .card-header {
-  background-color: #0d3b66 !important;
-  color: #ffcc00 !important;
+  background-color: #293855 !important;
+  color: #F1AC20 !important;
 }
 
 /* ===========================
    ADMIN TABLE STYLES
 =========================== */
 .table thead {
-  background-color: #001f3f;
-  color: #FFD700;
+  background-color: #293855;
+  color: #F1AC20;
 }
 
 .table td,
@@ -192,21 +192,21 @@ body {
 }
 
 .bg-navy {
-  background-color: #001f3f !important;
+  background-color: #293855 !important;
 }
 
 .text-golden {
-  color: #FFD700 !important;
+  color: #F1AC20 !important;
 }
 
 .table-dark th {
-  background-color: #001f3f !important;
-  color: #FFD700 !important;
+  background-color: #293855 !important;
+  color: #F1AC20 !important;
 }
 
 /* Colors */
-.bg-navy { background-color: #001f3f !important; }
-.text-golden { color: #FFD700 !important; }
+.bg-navy { background-color: #293855 !important; }
+.text-golden { color: #F1AC20 !important; }
 
 /* Hero Section */
 .hero {

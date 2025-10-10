@@ -2,6 +2,12 @@
 session_start();
 include 'connections.php';
 
+// Restrict access to admin only
+if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+    header("Location: index.php");
+    exit();
+}
+
 // Fetch enrolled vs not enrolled students (students only)
 $enrolled = $conn->query("SELECT COUNT(*) AS total FROM users WHERE status='Enrolled' AND role='student'")->fetch_assoc()['total'];
 $not_enrolled = $conn->query("SELECT COUNT(*) AS total FROM users WHERE status='Not Enrolled' AND role='student'")->fetch_assoc()['total'];
@@ -138,7 +144,7 @@ foreach($program_groups as $school => $programs) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AcademicsPro - Admin Dashboard</title>
+  <title>NU Lipa - Admin Dashboard</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
@@ -179,7 +185,7 @@ foreach($program_groups as $school => $programs) {
     .logo-icon {
       width: 40px;
       height: 40px;
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -208,7 +214,7 @@ foreach($program_groups as $school => $programs) {
     }
     
     .nav-item.active {
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       color: white;
     }
     
@@ -252,7 +258,7 @@ foreach($program_groups as $school => $programs) {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -265,7 +271,7 @@ foreach($program_groups as $school => $programs) {
     
     .user-profile:hover {
       transform: scale(1.05);
-      box-shadow: 0 4px 8px rgba(0, 31, 84, 0.3);
+      box-shadow: 0 4px 8px rgba(41, 56, 85, 0.3);
     }
     
     .dropdown-menu {
@@ -414,11 +420,11 @@ foreach($program_groups as $school => $programs) {
     }
     
     .legend-dot.enrolled {
-      background: #001f54;
+      background: #293855;
     }
     
     .legend-dot.not-enrolled {
-      background: #ffcc00;
+      background: #F1AC20;
     }
     
     .legend-text {
@@ -455,11 +461,11 @@ foreach($program_groups as $school => $programs) {
     }
     
     .stats-bar-fill.enrolled {
-      background: linear-gradient(90deg, #001f54, #1d4ed8);
+      background: linear-gradient(90deg, #293855, #4165D5);
     }
     
     .stats-bar-fill.not-enrolled {
-      background: #ffcc00;
+      background: #F1AC20;
     }
     
     /* New Chart Container Styles */
@@ -555,11 +561,11 @@ foreach($program_groups as $school => $programs) {
     }
     
     .enrollment-segment.enrolled {
-      background: linear-gradient(90deg, #001f54, #1d4ed8);
+      background: linear-gradient(90deg, #293855, #4165D5);
     }
     
     .enrollment-segment.not-enrolled {
-      background: #ffcc00;
+      background: #F1AC20;
     }
     
     /* Likelihood Summary */
@@ -652,13 +658,13 @@ foreach($program_groups as $school => $programs) {
     }
     
     .filter-dropdown:hover {
-      border-color: #001f54;
+      border-color: #293855;
     }
     
     .filter-dropdown:focus {
       outline: none;
-      border-color: #001f54;
-      box-shadow: 0 0 0 3px rgba(0, 31, 84, 0.1);
+      border-color: #293855;
+      box-shadow: 0 0 0 3px rgba(41, 56, 85, 0.1);
     }
     /* Enhanced Table Styles */
     .modern-table {
@@ -775,7 +781,7 @@ foreach($program_groups as $school => $programs) {
     
     .likelihood-progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, #001f54, #1d4ed8);
+      background: linear-gradient(90deg, #293855, #4165D5);
       border-radius: 4px;
       transition: width 0.3s ease;
     }
@@ -852,7 +858,7 @@ foreach($program_groups as $school => $programs) {
       left: 0;
       right: 0;
       height: 2px;
-      background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+      background: linear-gradient(90deg, #4165D5, #293855);
       opacity: 0;
       transition: opacity 0.3s ease;
     }
@@ -887,7 +893,7 @@ foreach($program_groups as $school => $programs) {
       transition: background-color 0.3s ease;
     }
     .table tbody tr:hover td::before {
-      background: #3b82f6;
+      background: #4165D5;
     }
     .student-table th:nth-child(1), .student-table td:nth-child(1) { 
       width: 60px; 
@@ -1056,8 +1062,7 @@ foreach($program_groups as $school => $programs) {
   <!-- Header Bar -->
   <header class="header-bar">
     <a href="#" class="logo">
-      <div class="logo-icon">A</div>
-      <span>AcademicsPro</span>
+      <img src="images/National University Lipa.png" alt="NU Lipa" class="logo-image" style="width: 130px; height: 50px;">
     </a>
     
     <nav class="nav-menu">
@@ -1244,7 +1249,7 @@ foreach($program_groups as $school => $programs) {
       labels: ['Enrolled', 'Not Enrolled'],
       datasets: [{
         data: [<?php echo $enrolled; ?>, <?php echo $not_enrolled; ?>],
-        backgroundColor: ['#001f54', '#ffcc00'],
+        backgroundColor: ['#293855', '#F1AC20'],
         borderWidth: 0,
         cutout: '70%'
       }]

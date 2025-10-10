@@ -13,6 +13,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_user'])) {
     try {
         $user_id = intval($_POST['user_id']);
         
+        // Log the update attempt for debugging
+        error_log("Admin update attempt - User ID: $user_id, POST data: " . print_r($_POST, true));
+        
         // Validate required fields
         if (empty($user_id)) {
             throw new Exception("Invalid user ID");
@@ -41,23 +44,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_user'])) {
         $conn->begin_transaction();
 
         // First, verify the user exists and is a student
-        $verify_user = $conn->prepare("SELECT id FROM users WHERE id = ? AND role = 'student'");
+        $verify_user = $conn->prepare("SELECT id, email, role, status FROM users WHERE id = ?");
         $verify_user->bind_param("i", $user_id);
         $verify_user->execute();
-        $user_exists = $verify_user->get_result()->num_rows > 0;
-        $verify_user->close();
+        $user_result = $verify_user->get_result();
+        $user_exists = $user_result->num_rows > 0;
         
-        if (!$user_exists) {
+        // Log verification result for debugging
+        if ($user_result->num_rows > 0) {
+            $user_row = $user_result->fetch_assoc();
+            error_log("User verification - ID: $user_id, Email: " . $user_row['email'] . ", Role: " . $user_row['role'] . ", Status: " . $user_row['status']);
+            
+            // Check if user is a student
+            if ($user_row['role'] !== 'student') {
+                throw new Exception("Cannot edit admin users. Only student records can be edited.");
+            }
+        } else {
+            error_log("User verification - ID: $user_id, User not found");
             throw new Exception("Student not found or invalid user ID");
         }
+        $verify_user->close();
 
         // Update users table (status and email)
         $stmt = $conn->prepare("UPDATE users SET status = ?, email = ? WHERE id = ? AND role = 'student'");
         $stmt->bind_param("ssi", $status, $email, $user_id);
         $stmt->execute();
         
-        if ($stmt->affected_rows === 0) {
-            throw new Exception("Failed to update user record");
+        // Log the update attempt for debugging
+        error_log("Update attempt - User ID: $user_id, Status: $status, Email: $email, Affected rows: " . $stmt->affected_rows);
+        
+        if ($stmt->error) {
+            error_log("SQL Error during users table update: " . $stmt->error);
+            throw new Exception("Database error during user update: " . $stmt->error);
         }
         $stmt->close();
 
@@ -76,8 +94,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_user'])) {
             $stmt2->bind_param("sssssi", $firstname, $middlename, $lastname, $program, $mobile, $user_id);
             $stmt2->execute();
             
-            if ($stmt2->affected_rows === 0) {
-                throw new Exception("Failed to update student information");
+            // Log the update attempt for debugging
+            error_log("User_info update attempt - User ID: $user_id, Affected rows: " . $stmt2->affected_rows);
+            
+            if ($stmt2->error) {
+                error_log("SQL Error during user_info table update: " . $stmt2->error);
+                throw new Exception("Database error during student information update: " . $stmt2->error);
             }
             $stmt2->close();
         } else {
@@ -86,8 +108,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_user'])) {
             $stmt2->bind_param("isssss", $user_id, $firstname, $middlename, $lastname, $program, $mobile);
             $stmt2->execute();
             
-            if ($stmt2->affected_rows === 0) {
-                throw new Exception("Failed to create student information record");
+            // Log the insert attempt for debugging
+            error_log("User_info insert attempt - User ID: $user_id, Affected rows: " . $stmt2->affected_rows);
+            
+            if ($stmt2->error) {
+                error_log("SQL Error during user_info table insert: " . $stmt2->error);
+                throw new Exception("Database error during student information creation: " . $stmt2->error);
             }
             $stmt2->close();
         }
@@ -100,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_user'])) {
         
     } catch (Exception $e) {
         // Rollback transaction on error
-        if ($conn->transaction_depth > 0) {
+        if (isset($conn)) {
             $conn->rollback();
         }
         $_SESSION['message'] = "❌ Error: " . $e->getMessage();
@@ -110,6 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_user'])) {
         error_log("Admin update error: " . $e->getMessage());
         error_log("User ID: " . ($_POST['user_id'] ?? 'not set'));
         error_log("POST data: " . print_r($_POST, true));
+        error_log("Database connection status: " . ($conn ? 'Connected' : 'Not connected'));
     }
 
     header("Location: admin.php?updated=" . time());
@@ -163,7 +190,7 @@ if (!empty($filter_program)) {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Students - AcademicsPro Admin</title>
+  <title>Students - NU Lipa Admin</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
   <style>
@@ -202,7 +229,7 @@ if (!empty($filter_program)) {
     .logo-icon {
       width: 40px;
       height: 40px;
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -231,7 +258,7 @@ if (!empty($filter_program)) {
     }
     
     .nav-item.active {
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       color: white;
     }
     
@@ -280,7 +307,7 @@ if (!empty($filter_program)) {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -293,7 +320,7 @@ if (!empty($filter_program)) {
     
     .user-profile:hover {
       transform: scale(1.05);
-      box-shadow: 0 4px 8px rgba(0, 31, 84, 0.3);
+      box-shadow: 0 4px 8px rgba(41, 56, 85, 0.3);
     }
     
     .dropdown-menu {
@@ -370,26 +397,6 @@ if (!empty($filter_program)) {
       margin: 0;
     }
     
-    .add-student-btn {
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
-      color: white;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      font-weight: 600;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: all 0.2s ease;
-    }
-    
-    .add-student-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 8px rgba(0, 31, 84, 0.3);
-      color: white;
-    }
-    
     .plus-icon {
       width: 20px;
       height: 20px;
@@ -419,8 +426,8 @@ if (!empty($filter_program)) {
     }
     
     .filter-select:focus {
-      border-color: #001f54;
-      box-shadow: 0 0 0 3px rgba(0, 31, 84, 0.1);
+      border-color: #293855;
+      box-shadow: 0 0 0 3px rgba(41, 56, 85, 0.1);
       outline: none;
     }
 
@@ -487,13 +494,13 @@ if (!empty($filter_program)) {
     }
     
     .status-active {
-      background: #d1fae5;
-      color: #065f46;
+      background: #C3E8C9;
+      color: #293855;
     }
     
     .status-on-hold {
-      background: #fef3c7;
-      color: #92400e;
+      background: #F1AC20;
+      color: white;
     }
     
     .status-inactive {
@@ -503,7 +510,7 @@ if (!empty($filter_program)) {
 
     /* View Link */
     .view-link {
-      color: #001f54;
+      color: #293855;
       text-decoration: none;
       font-weight: 500;
       font-size: 0.875rem;
@@ -511,7 +518,7 @@ if (!empty($filter_program)) {
     }
     
     .view-link:hover {
-      color: #1d4ed8;
+      color: #4165D5;
     }
 
     /* Alert Styles */
@@ -568,8 +575,7 @@ if (!empty($filter_program)) {
 <!-- Header Bar -->
 <header class="header-bar">
   <a href="index.php" class="logo">
-    <div class="logo-icon">A</div>
-    <span>AcademicsPro</span>
+    <img src="images/National University Lipa.png" alt="NU Lipa" class="logo-image" style="width: 130px; height: 50px;">
   </a>
   
   <nav class="nav-menu">
@@ -613,17 +619,6 @@ if (!empty($filter_program)) {
 
 <!-- Main Content -->
 <main class="main-content">
-
-  <!-- Page Header -->
-  <div class="page-header">
-    <h1 class="page-title">Students</h1>
-    <a href="#" class="add-student-btn">
-      <svg class="plus-icon" fill="currentColor" viewBox="0 0 20 20">
-        <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
-      </svg>
-      Add Student
-    </a>
-  </div>
 
   <?php if (isset($_SESSION['message'])): ?>
     <div class="alert alert-<?= $_SESSION['message_type'] ?? 'info' ?> alert-dismissible fade show" role="alert">
@@ -713,7 +708,7 @@ if (!empty($filter_program)) {
             <div class="modal-dialog modal-xl modal-dialog-scrollable">
               <div class="modal-content" style="border: none; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);">
                 <form method="POST" id="studentForm<?= $row['user_id']; ?>">
-                  <div class="modal-header" style="background: linear-gradient(135deg, #001f54, #1d4ed8); color: white; border-radius: 12px 12px 0 0; border-bottom: none; padding: 1.5rem 2rem;">
+                  <div class="modal-header" style="background: linear-gradient(135deg, #293855, #4165D5); color: white; border-radius: 12px 12px 0 0; border-bottom: none; padding: 1.5rem 2rem;">
                     <div class="d-flex align-items-center gap-3">
                       <div class="student-avatar" style="width: 50px; height: 50px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700;">
                         <?= strtoupper(substr($row['firstname'] ?? 'U', 0, 1)) ?>
@@ -840,7 +835,7 @@ if (!empty($filter_program)) {
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style="padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 500;">
                       Cancel
                     </button>
-                    <button type="submit" name="update_user" class="btn btn-primary" style="background: linear-gradient(135deg, #001f54, #1d4ed8); border: none; padding: 0.75rem 2rem; border-radius: 6px; font-weight: 600; transition: all 0.2s ease;">
+                    <button type="submit" name="update_user" class="btn btn-primary" style="background: linear-gradient(135deg, #293855, #4165D5); border: none; padding: 0.75rem 2rem; border-radius: 6px; font-weight: 600; transition: all 0.2s ease;">
                       💾 Save Changes
                     </button>
                   </div>

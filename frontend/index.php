@@ -6,7 +6,7 @@ include 'connections.php';
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>AcademicsPro - Welcome</title>
+  <title>NU Lipa - Welcome</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
@@ -46,7 +46,7 @@ include 'connections.php';
     .logo-icon {
       width: 40px;
       height: 40px;
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -75,7 +75,7 @@ include 'connections.php';
     }
     
     .nav-item.active {
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       color: white;
     }
     
@@ -103,7 +103,7 @@ include 'connections.php';
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -116,7 +116,7 @@ include 'connections.php';
     
     .user-profile:hover {
       transform: scale(1.05);
-      box-shadow: 0 4px 8px rgba(0, 31, 84, 0.3);
+      box-shadow: 0 4px 8px rgba(41, 56, 85, 0.3);
     }
     
     .dropdown-menu {
@@ -190,7 +190,7 @@ include 'connections.php';
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 31, 84, 0.8);
+      background: rgba(41, 56, 85, 0.8);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
     }
@@ -208,7 +208,7 @@ include 'connections.php';
       font-size: 3.5rem;
       font-weight: 700;
       margin-bottom: 1rem;
-      background: linear-gradient(135deg, #ffcc00, #ffd700);
+      background: linear-gradient(135deg, #F1AC20, #ffd700);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -243,14 +243,14 @@ include 'connections.php';
     }
     
     .btn-register {
-      background: linear-gradient(135deg, #ffcc00, #ffd700);
-      color: #001f54;
+      background: linear-gradient(135deg, #F1AC20, #ffd700);
+      color: #293855;
     }
     
     .btn-register:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(255, 204, 0, 0.4);
-      color: #001f54;
+      box-shadow: 0 8px 25px rgba(241, 172, 32, 0.4);
+      color: #293855;
     }
     
     .btn-login {
@@ -261,7 +261,7 @@ include 'connections.php';
     
     .btn-login:hover {
       background: white;
-      color: #001f54;
+      color: #293855;
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
     }
@@ -322,8 +322,7 @@ include 'connections.php';
 <!-- Header Bar -->
 <header class="header-bar">
   <a href="index.php" class="logo">
-    <div class="logo-icon">A</div>
-    <span>AcademicsPro</span>
+    <img src="images/National University Lipa.png" alt="NU Lipa" class="logo-image" style="width: 130px; height: 50px;">
   </a>
   
   
@@ -356,7 +355,7 @@ include 'connections.php';
 <!-- Hero Section -->
 <section class="hero">
   <div class="hero-content">
-    <h1 class="hero-title">Welcome to AcademicsPro</h1>
+    <h1 class="hero-title">Welcome to NU Lipa</h1>
     <p class="hero-subtitle">Your gateway to student services, enrollment tracking, and analytics.</p>
     
     <div class="hero-buttons">

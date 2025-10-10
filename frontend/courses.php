@@ -2,6 +2,12 @@
 session_start();
 include 'connections.php';
 
+// Restrict access to admin only
+if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+    header("Location: index.php");
+    exit();
+}
+
 // Fetch all courses with enhanced information
 $query = "SELECT * FROM courses ORDER BY course_name ASC";
 $result = $conn->query($query);
@@ -35,7 +41,7 @@ if ($semester_result->num_rows > 0) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AcademicsPro - Courses Management</title>
+  <title>NU Lipa - Courses Management</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
@@ -75,7 +81,7 @@ if ($semester_result->num_rows > 0) {
     .logo-icon {
       width: 40px;
       height: 40px;
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -104,7 +110,7 @@ if ($semester_result->num_rows > 0) {
     }
     
     .nav-item.active {
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       color: white;
     }
     
@@ -148,7 +154,7 @@ if ($semester_result->num_rows > 0) {
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -161,7 +167,7 @@ if ($semester_result->num_rows > 0) {
     
     .user-profile:hover {
       transform: scale(1.05);
-      box-shadow: 0 4px 8px rgba(0, 31, 84, 0.3);
+      box-shadow: 0 4px 8px rgba(41, 56, 85, 0.3);
     }
     
     .dropdown-menu {
@@ -340,13 +346,13 @@ if ($semester_result->num_rows > 0) {
     }
     
     .filter-dropdown:hover {
-      border-color: #001f54;
+      border-color: #293855;
     }
     
     .filter-dropdown:focus {
       outline: none;
-      border-color: #001f54;
-      box-shadow: 0 0 0 3px rgba(0, 31, 84, 0.1);
+      border-color: #293855;
+      box-shadow: 0 0 0 3px rgba(41, 56, 85, 0.1);
     }
     
     .search-input {
@@ -361,13 +367,13 @@ if ($semester_result->num_rows > 0) {
     }
     
     .search-input:hover {
-      border-color: #001f54;
+      border-color: #293855;
     }
     
     .search-input:focus {
       outline: none;
-      border-color: #001f54;
-      box-shadow: 0 0 0 3px rgba(0, 31, 84, 0.1);
+      border-color: #293855;
+      box-shadow: 0 0 0 3px rgba(41, 56, 85, 0.1);
     }
     
     /* Courses Grid */
@@ -398,7 +404,7 @@ if ($semester_result->num_rows > 0) {
     
     .course-code {
       display: inline-block;
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       color: white;
       padding: 0.25rem 0.75rem;
       border-radius: 20px;
@@ -451,7 +457,7 @@ if ($semester_result->num_rows > 0) {
     }
     
     .view-details-btn {
-      background: linear-gradient(135deg, #001f54, #1d4ed8);
+      background: linear-gradient(135deg, #293855, #4165D5);
       color: white;
       border: none;
       padding: 0.5rem 1rem;
@@ -466,7 +472,7 @@ if ($semester_result->num_rows > 0) {
     
     .view-details-btn:hover {
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 31, 84, 0.3);
+      box-shadow: 0 4px 12px rgba(41, 56, 85, 0.3);
       color: white;
     }
     
@@ -548,8 +554,7 @@ if ($semester_result->num_rows > 0) {
   <!-- Header Bar -->
   <header class="header-bar">
     <a href="#" class="logo">
-      <div class="logo-icon">A</div>
-      <span>AcademicsPro</span>
+      <img src="images/National University Lipa.png" alt="NU Lipa" class="logo-image" style="width: 130px; height: 50px;">
     </a>
     
     <nav class="nav-menu">

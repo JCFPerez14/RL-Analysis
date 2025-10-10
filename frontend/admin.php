@@ -277,27 +277,7 @@ if (!empty($filter_program)) {
       align-items: center;
       gap: 1rem;
     }
-    
-    .notification-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: #f3f4f6;
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #6b7280;
-      font-size: 1.25rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    
-    .notification-btn:hover {
-      background: #e5e7eb;
-      color: #374151;
-      transform: scale(1.05);
-    }
+  
     
     .user-profile-dropdown {
       position: relative;
@@ -508,17 +488,32 @@ if (!empty($filter_program)) {
       color: #991b1b;
     }
 
-    /* View Link */
+    /* View Link Button */
     .view-link {
-      color: #293855;
-      text-decoration: none;
+      background: linear-gradient(135deg, #293855, #4165D5);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
       font-weight: 500;
       font-size: 0.875rem;
-      transition: color 0.2s ease;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
     }
     
     .view-link:hover {
-      color: #4165D5;
+      background: linear-gradient(135deg, #1e293b, #3b4fd1);
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(41, 56, 85, 0.3);
+    }
+    
+    .view-link:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(41, 56, 85, 0.3);
     }
 
     /* Alert Styles */
@@ -600,7 +595,6 @@ if (!empty($filter_program)) {
   </nav>
   
   <div class="header-actions">
-    <button class="notification-btn">🔔</button>
     <div class="user-profile-dropdown">
       <div class="user-profile" onclick="toggleDropdown()">A</div>
       <div class="dropdown-menu" id="profileDropdown">

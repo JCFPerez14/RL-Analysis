@@ -130,22 +130,6 @@ if ($semester_result->num_rows > 0) {
       gap: 1rem;
     }
     
-    .notification-btn {
-      background: none;
-      border: none;
-      color: #6b7280;
-      font-size: 1.25rem;
-      cursor: pointer;
-      padding: 0.5rem;
-      border-radius: 8px;
-      transition: all 0.2s ease;
-    }
-    
-    .notification-btn:hover {
-      background: #f3f4f6;
-      color: #374151;
-    }
-    
     .user-profile-dropdown {
       position: relative;
     }
@@ -579,7 +563,6 @@ if ($semester_result->num_rows > 0) {
     </nav>
     
     <div class="header-actions">
-      <button class="notification-btn">🔔</button>
       <div class="user-profile-dropdown">
         <div class="user-profile" onclick="toggleDropdown()">A</div>
         <div class="dropdown-menu" id="profileDropdown">

@@ -4,8 +4,17 @@ include 'connections.php';
 
 // Restrict access to admin only
 if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+    // Clear any existing session data
+    session_unset();
+    session_destroy();
     header("Location: index.php");
     exit();
+}
+
+// Additional security: regenerate session ID to prevent session fixation
+if (!isset($_SESSION['admin_authenticated'])) {
+    session_regenerate_id(true);
+    $_SESSION['admin_authenticated'] = true;
 }
 
 // Handle updates

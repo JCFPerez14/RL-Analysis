@@ -2,8 +2,8 @@
 session_start();
 include 'connections.php';
 
-// Restrict access to admin only
-if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
+// Restrict access to logged-in users only (admin and students)
+if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['admin', 'student'])) {
     // Clear any existing session data
     session_unset();
     session_destroy();
@@ -12,9 +12,9 @@ if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
 }
 
 // Additional security: regenerate session ID to prevent session fixation
-if (!isset($_SESSION['admin_authenticated'])) {
+if (!isset($_SESSION['authenticated'])) {
     session_regenerate_id(true);
-    $_SESSION['admin_authenticated'] = true;
+    $_SESSION['authenticated'] = true;
 }
 
 // Fetch all courses with enhanced information
@@ -551,18 +551,27 @@ if ($semester_result->num_rows > 0) {
     </a>
     
     <nav class="nav-menu">
-      <a href="enrollee.php" class="nav-item">
-        <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
-        </svg>
-        Dashboard
-      </a>
-      <a href="admin.php" class="nav-item">
-        <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
-        </svg>
-        Students
-      </a>
+      <?php if ($_SESSION['user']['role'] === 'admin'): ?>
+        <a href="enrollee.php" class="nav-item">
+          <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+          </svg>
+          Dashboard
+        </a>
+        <a href="admin.php" class="nav-item">
+          <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+          </svg>
+          Students
+        </a>
+      <?php else: ?>
+        <a href="index.php" class="nav-item">
+          <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+          </svg>
+          Home
+        </a>
+      <?php endif; ?>
       <a href="courses.php" class="nav-item active">
         <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
           <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2a1 1 0 000 2h6a1 1 0 100-2H7zm6 7a1 1 0 011 1v3a1 1 0 11-2 0v-3a1 1 0 011-1zm-3 3a1 1 0 100 2h.01a1 1 0 100-2H10zm-4 1a1 1 0 011-1h.01a1 1 0 110 2H7a1 1 0 01-1-1zm1-4a1 1 0 100 2h.01a1 1 0 100-2H7zm2 0a1 1 0 100 2h.01a1 1 0 100-2H9zm2 0a1 1 0 100 2h.01a1 1 0 100-2h-.01z"/>
@@ -573,9 +582,9 @@ if ($semester_result->num_rows > 0) {
     
     <div class="header-actions">
       <div class="user-profile-dropdown">
-        <div class="user-profile" onclick="toggleDropdown()">A</div>
+        <div class="user-profile" onclick="toggleDropdown()"><?= strtoupper(substr($_SESSION['user']['firstname'] ?? 'U', 0, 1)) ?></div>
         <div class="dropdown-menu" id="profileDropdown">
-          <div class="dropdown-header">Administrator</div>
+          <div class="dropdown-header"><?= $_SESSION['user']['role'] === 'admin' ? 'Administrator' : 'Student' ?></div>
           <div class="dropdown-divider"></div>
           <a href="logout.php" class="dropdown-item">
             <svg class="dropdown-icon" fill="currentColor" viewBox="0 0 20 20">
@@ -591,7 +600,13 @@ if ($semester_result->num_rows > 0) {
   <!-- Main Content -->
   <main class="main-content">
     <div class="dashboard-title">Course Catalog</div>
-    <div class="dashboard-subtitle">Comprehensive overview of all available courses and academic programs</div>
+    <div class="dashboard-subtitle">
+      <?php if ($_SESSION['user']['role'] === 'admin'): ?>
+        Comprehensive overview of all available courses and academic programs
+      <?php else: ?>
+        Explore all available courses and academic programs at National University Lipa
+      <?php endif; ?>
+    </div>
     
     <!-- Statistics Cards -->
     <div class="stats-grid">

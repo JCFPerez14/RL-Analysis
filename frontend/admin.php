@@ -578,7 +578,7 @@ if (!empty($filter_program)) {
 
 <!-- Header Bar -->
 <header class="header-bar">
-  <a href="index.php" class="logo">
+  <a href="#" class="logo">
     <img src="images/National University Lipa.png" alt="NU Lipa" class="logo-image" style="width: 130px; height: 50px;">
   </a>
   

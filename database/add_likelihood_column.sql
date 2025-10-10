@@ -1,2 +1,0 @@
--- Add likelihood column to user_info table if it doesn't exist
-ALTER TABLE user_info ADD COLUMN IF NOT EXISTS likelihood DECIMAL(5,2) DEFAULT NULL COMMENT 'ML predicted enrollment likelihood (0-100)';

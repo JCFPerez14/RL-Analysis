@@ -16,6 +16,21 @@ Step 7: Open the Terminal by pressing 'Ctrl + Shift + `' or by pressing Terminal
 
 Step 8: On the Terminal, type or paste 'cd server' and then create your virtual environment by typing or pasting 'python3 -m venv venv'.
 
+Type:
+
+``` bash 
+cd server #directory
+```
+``` bash
+pythone3 appy.py #run file
+```
+Open browser:
+Type: http://localhost/RL-Analysis/frontend/login.php
+
+Admin User: dimaanosr@students.nu-lipa.edu.ph
+Password User: 12345
+
+
 Step 9: Install the required dependencies by typing 'pip install Flask pickle pandas numpy scikit-learn' on the terminal.
 
 Step 10: Then, run the file (app.py) for the backend connection using the command 'python3 app.py' on the terminal.

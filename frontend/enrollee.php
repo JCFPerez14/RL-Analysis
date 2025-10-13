@@ -124,7 +124,7 @@ foreach($program_labels as $program) {
 // Define program groups by schools
 $program_groups = [
     'SACE' => ['BSCS', 'BSArch', 'BSCE', 'BSIT'],
-    'SABM' => ['BSTM', 'BSA', 'BSBA - Fin', 'BSBA - MM'],
+    'SABM' => ['BSTM', 'BSA - Marketing', 'BSBA - Fin', 'BSBA - MM'],
     'SAHS' => ['BSN', 'BSMT', 'BSPsy']
 ];
 
@@ -1193,8 +1193,21 @@ foreach($program_groups as $school => $programs) {
         </select>
         <select class="filter-dropdown" id="programFilter">
           <option value="all">Program</option>
-          <option value="BSCS">BSCS</option>
-          <option value="BSTM">BSTM</option>
+          <?php
+          // Get unique programs from the database
+          $program_options = $conn->query("
+            SELECT DISTINCT program 
+            FROM user_info 
+            WHERE program IS NOT NULL AND program != ''
+            ORDER BY program
+          ");
+          
+          if ($program_options->num_rows > 0) {
+            while($row = $program_options->fetch_assoc()) {
+              echo "<option value='".htmlspecialchars($row['program'])."'>".htmlspecialchars($row['program'])."</option>";
+            }
+          }
+          ?>
         </select>
       </div>
       
@@ -1439,14 +1452,26 @@ foreach($program_groups as $school => $programs) {
       const schoolData = [];
       const schoolColors = [];
       
-      schoolPrograms.forEach(program => {
+      // Get available colors for the filtered programs
+      const availableColors = ['#001f54', '#1d4ed8', '#3b82f6', '#60a5fa', '#93c5fd', '#a5b4fc', '#c7d2fe', '#e0e7ff'];
+      
+      console.log('Filter:', filter);
+      console.log('School Programs:', schoolPrograms);
+      console.log('Original Program Labels:', originalData.programs.labels);
+      console.log('Original Program Data:', originalData.programs.data);
+      
+      schoolPrograms.forEach((program, index) => {
         const programIndex = originalData.programs.labels.indexOf(program);
+        console.log(`Looking for program: ${program}, found at index: ${programIndex}`);
         if (programIndex !== -1) {
           schoolLabels.push(program);
           schoolData.push(originalData.programs.data[programIndex]);
-          schoolColors.push(originalData.programs.colors[programIndex]);
+          schoolColors.push(availableColors[index % availableColors.length]);
         }
       });
+      
+      console.log('Filtered Labels:', schoolLabels);
+      console.log('Filtered Data:', schoolData);
       
       programChart.data.labels = schoolLabels;
       programChart.data.datasets[0].data = schoolData;

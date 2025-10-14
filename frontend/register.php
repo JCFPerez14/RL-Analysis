@@ -1226,6 +1226,9 @@ include 'connections.php';
         <!-- Hidden fields for compatibility -->
         <input type="hidden" name="nationality" value="Filipino">
         <input type="hidden" name="current_address" value="">
+        <input type="hidden" name="province_code" id="province_code" value="">
+        <input type="hidden" name="city_code" id="city_code" value="">
+        <input type="hidden" name="barangay_code" id="barangay_code" value="">
             </form>
           </div>
         </div>
@@ -1313,16 +1316,18 @@ include 'connections.php';
     
     sortedProvinces.forEach(province => {
       const option = document.createElement('option');
-      option.value = province.code;
+      option.value = province.name; // Use name instead of code
       option.textContent = province.name;
+      option.setAttribute('data-code', province.code); // Store code as data attribute
       option.setAttribute('data-name', province.name);
       provinceSelect.appendChild(option);
     });
     
     // Add special option for NCR/Metro Manila cities (cities with empty provinceCode)
     const ncrOption = document.createElement('option');
-    ncrOption.value = ''; // Empty value to match empty provinceCode
+    ncrOption.value = 'National Capital Region (NCR)'; // Use name as value
     ncrOption.textContent = 'National Capital Region (NCR)';
+    ncrOption.setAttribute('data-code', ''); // Empty code for NCR
     ncrOption.setAttribute('data-name', 'National Capital Region (NCR)');
     provinceSelect.appendChild(ncrOption);
   }
@@ -1349,10 +1354,12 @@ include 'connections.php';
     citySelect.disabled = true;
     barangaySelect.disabled = true;
     
-    const selectedProvinceCode = provinceSelect.value;
+    const selectedProvinceName = provinceSelect.value;
+    const selectedProvinceCode = provinceSelect.selectedOptions[0]?.getAttribute('data-code');
+    console.log('Selected province name:', selectedProvinceName);
     console.log('Selected province code:', selectedProvinceCode);
     
-    if (!selectedProvinceCode) {
+    if (!selectedProvinceName) {
       citySelect.innerHTML = '<option value="">Select City/Municipality</option>';
       return;
     }
@@ -1405,8 +1412,9 @@ include 'connections.php';
     
     sortedCities.forEach(city => {
       const option = document.createElement('option');
-      option.value = city.code;
+      option.value = city.name; // Use name instead of code
       option.textContent = city.name;
+      option.setAttribute('data-code', city.code); // Store code as data attribute
       option.setAttribute('data-name', city.name);
       citySelect.appendChild(option);
     });
@@ -1423,10 +1431,12 @@ include 'connections.php';
     barangaySelect.innerHTML = '<option value="">Loading barangays...</option>';
     barangaySelect.disabled = true;
     
-    const selectedCityCode = citySelect.value;
+    const selectedCityName = citySelect.value;
+    const selectedCityCode = citySelect.selectedOptions[0]?.getAttribute('data-code');
+    console.log('Selected city name:', selectedCityName);
     console.log('Selected city code:', selectedCityCode);
     
-    if (!selectedCityCode) {
+    if (!selectedCityName) {
       barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
       return;
     }
@@ -1478,8 +1488,9 @@ include 'connections.php';
     
     sortedBarangays.forEach(barangay => {
       const option = document.createElement('option');
-      option.value = barangay.code;
+      option.value = barangay.name; // Use name instead of code
       option.textContent = barangay.name;
+      option.setAttribute('data-code', barangay.code); // Store code as data attribute
       option.setAttribute('data-name', barangay.name);
       barangaySelect.appendChild(option);
     });
@@ -1548,6 +1559,9 @@ include 'connections.php';
     // Initialize step management
     initializeStepManagement();
     
+    // Initialize location code tracking
+    initializeLocationCodeTracking();
+    
     // Form submission handler
     document.getElementById('registrationForm').addEventListener('submit', function(e) {
       e.preventDefault();
@@ -1606,6 +1620,30 @@ include 'connections.php';
     
     // Initial validation update
     updateValidationSummary();
+  }
+
+  // Initialize location code tracking
+  function initializeLocationCodeTracking() {
+    // Track province selection
+    document.getElementById('province').addEventListener('change', function() {
+      const selectedOption = this.selectedOptions[0];
+      const provinceCode = selectedOption ? selectedOption.getAttribute('data-code') : '';
+      document.getElementById('province_code').value = provinceCode;
+    });
+    
+    // Track city selection
+    document.getElementById('city').addEventListener('change', function() {
+      const selectedOption = this.selectedOptions[0];
+      const cityCode = selectedOption ? selectedOption.getAttribute('data-code') : '';
+      document.getElementById('city_code').value = cityCode;
+    });
+    
+    // Track barangay selection
+    document.getElementById('barangay').addEventListener('change', function() {
+      const selectedOption = this.selectedOptions[0];
+      const barangayCode = selectedOption ? selectedOption.getAttribute('data-code') : '';
+      document.getElementById('barangay_code').value = barangayCode;
+    });
   }
 
   // Update validation summary

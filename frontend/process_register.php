@@ -24,19 +24,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $father_occupation = $_POST['father_occupation'];
     $mother_occupation = $_POST['mother_occupation'];
     $birthplace = $_POST['birthplace'];
-    $province_code = $_POST['province'];
-    $city_code = $_POST['city'];
-    $barangay_code = $_POST['barangay'];
+    $province = $_POST['province']; // Now contains the actual name
+    $city = $_POST['city']; // Now contains the actual name
+    $barangay = $_POST['barangay']; // Now contains the actual name
+    $province_code = $_POST['province_code']; // PSA API code
+    $city_code = $_POST['city_code']; // PSA API code
+    $barangay_code = $_POST['barangay_code']; // PSA API code
     $current_address = $_POST['current_address'];
-    
-    // For PSA API, we'll store the codes directly and get names from the API
-    // For now, we'll use the codes as the display values
-    $province = $province_code; // Will be updated with actual name
-    $city = $city_code; // Will be updated with actual name
-    $barangay = $barangay_code; // Will be updated with actual name
-    
-    // Get actual names from PSA API (optional - for better display)
-    // For now, we'll store the codes and display them
 
     // ✅ Handle file upload
     $photoPath = "uploads/default.png"; // default

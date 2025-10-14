@@ -147,6 +147,42 @@ foreach($program_groups as $school => $programs) {
         'total' => $school_enrolled + $school_not_enrolled
     ];
 }
+
+// Fetch demographic data for the new chart
+$demographic_fields = [
+    'program' => 'Program',
+    'second_program' => 'Second Program', 
+    'sex' => 'Gender',
+    'family_income' => 'Family Income',
+    'province' => 'Province',
+    'city' => 'City/Municipality',
+    'barangay' => 'Barangay'
+];
+
+$demographic_data = [];
+
+foreach($demographic_fields as $field => $label) {
+    $query = "
+        SELECT $field, COUNT(*) as count 
+        FROM user_info ui
+        JOIN users u ON ui.user_id = u.id
+        WHERE u.role = 'student' AND $field IS NOT NULL AND $field != ''
+        GROUP BY $field
+        ORDER BY count DESC
+    ";
+    
+    $result = $conn->query($query);
+    $demographic_data[$field] = [];
+    
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            $demographic_data[$field][] = [
+                'label' => $row[$field],
+                'count' => $row['count']
+            ];
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -1178,6 +1214,25 @@ foreach($program_groups as $school => $programs) {
           </div>
         </div>
       </div>
+      
+      <!-- Student Demographics Card -->
+      <div class="dashboard-card">
+        <div class="card-title">Student Demographics</div>
+        <div class="chart-filter">
+          <select class="filter-dropdown" id="demographicsFilter">
+            <option value="program">First Choice Program</option>
+            <option value="second_program">Second Choice Program</option>
+            <option value="sex">Gender</option>
+            <option value="family_income">Family Income</option>
+            <option value="province">Province</option>
+            <option value="city">City/Municipality</option>
+            <option value="barangay">Barangay</option>
+          </select>
+        </div>
+        <div class="chart-container">
+          <canvas id="demographicsChart"></canvas>
+        </div>
+      </div>
     </div>
     
     <!-- Students Likely to Enroll Table -->
@@ -1380,6 +1435,104 @@ foreach($program_groups as $school => $programs) {
     }
   });
 
+  // Demographics chart
+  const demographicsCtx = document.getElementById('demographicsChart').getContext('2d');
+  const demographicsChart = new Chart(demographicsCtx, {
+    type: 'pie',
+    data: {
+      labels: [],
+      datasets: [{
+        data: [],
+        backgroundColor: ['#001f54', '#1d4ed8', '#3b82f6', '#60a5fa', '#93c5fd', '#a5b4fc', '#c7d2fe', '#e0e7ff', '#f3f4f6', '#d1d5db'],
+        borderWidth: 2,
+        borderColor: '#ffffff',
+        hoverBorderWidth: 3,
+        hoverBorderColor: '#f3f4f6'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            padding: 20,
+            usePointStyle: true,
+            font: {
+              size: 12,
+              weight: '500'
+            }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const total = context.dataset.data.reduce((a, b) => a + b, 0);
+              const percentage = ((context.parsed / total) * 100).toFixed(1);
+              return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+            }
+          }
+        }
+      }
+    }
+  });
+
+  // Initialize demographics chart with program data
+  function initializeDemographicsChart() {
+    const currentField = document.getElementById('demographicsFilter').value;
+    const data = originalData.demographics[currentField];
+    
+    console.log('Initializing demographics chart with field:', currentField);
+    console.log('Demographics data:', originalData.demographics);
+    console.log('Current field data:', data);
+    
+    if (data && data.length > 0) {
+      const labels = data.map(item => item.label);
+      const counts = data.map(item => item.count);
+      
+      console.log('Chart labels:', labels);
+      console.log('Chart data:', counts);
+      
+      demographicsChart.data.labels = labels;
+      demographicsChart.data.datasets[0].data = counts;
+      demographicsChart.update();
+    } else {
+      console.log('No data available for field:', currentField);
+      // Show empty state
+      demographicsChart.data.labels = ['No Data'];
+      demographicsChart.data.datasets[0].data = [1];
+      demographicsChart.update();
+    }
+  }
+
+  // Filter demographics chart
+  function filterDemographicsChart() {
+    const filter = document.getElementById('demographicsFilter').value;
+    const data = originalData.demographics[filter];
+    
+    console.log('Filtering demographics chart with field:', filter);
+    console.log('Filtered data:', data);
+    
+    if (data && data.length > 0) {
+      const labels = data.map(item => item.label);
+      const counts = data.map(item => item.count);
+      
+      console.log('Filtered labels:', labels);
+      console.log('Filtered counts:', counts);
+      
+      demographicsChart.data.labels = labels;
+      demographicsChart.data.datasets[0].data = counts;
+      demographicsChart.update();
+    } else {
+      console.log('No data available for filter:', filter);
+      // Show empty state
+      demographicsChart.data.labels = ['No Data'];
+      demographicsChart.data.datasets[0].data = [1];
+      demographicsChart.update();
+    }
+  }
+
   // Update likelihood summary values
   document.getElementById('highLikelihood').textContent = <?php echo $likelihood_counts['high']; ?>;
   document.getElementById('mediumLikelihood').textContent = <?php echo $likelihood_counts['medium']; ?>;
@@ -1405,8 +1558,12 @@ foreach($program_groups as $school => $programs) {
     enrollmentByProgram: <?php echo json_encode($enrollment_by_program); ?>,
     enrollmentBySchool: <?php echo json_encode($enrollment_by_school); ?>,
     programGroups: <?php echo json_encode($program_groups); ?>,
-    studentData: <?php echo json_encode($student_data); ?>
+    studentData: <?php echo json_encode($student_data); ?>,
+    demographics: <?php echo json_encode($demographic_data); ?>
   };
+
+  // Initialize demographics chart after data is loaded
+  initializeDemographicsChart();
 
   // Filter functions
   function filterEnrollmentChart() {
@@ -1507,6 +1664,7 @@ foreach($program_groups as $school => $programs) {
   document.getElementById('enrollmentFilter').addEventListener('change', filterEnrollmentChart);
   document.getElementById('programChartFilter').addEventListener('change', filterProgramChart);
   document.getElementById('likelihoodFilter').addEventListener('change', filterLikelihoodChart);
+  document.getElementById('demographicsFilter').addEventListener('change', filterDemographicsChart);
 
   // Filter elements
   const statusFilter = document.getElementById('statusFilter');
